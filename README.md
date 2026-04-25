@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aryan Shukla — Portfolio
 
-## Getting Started
+Personal developer portfolio. Built with Next.js 16, Tailwind CSS v4, Framer Motion, and shadcn/ui.
 
-First, run the development server:
+## Stack
+
+- **Framework:** Next.js 16 (App Router, static export)
+- **Styling:** Tailwind CSS v4 + shadcn/ui components
+- **Animations:** Framer Motion (scroll-triggered, non-looping)
+- **Fonts:** Instrument Serif (display) + DM Sans (body) via `next/font/google`
+- **Theme:** Monochrome — light/dark toggle, persisted to `localStorage`
+- **Deployed on:** Vercel → `aryans.is-a.dev`
+
+## Local development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+## Project structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+  layout.tsx        — Root layout, fonts, metadata
+  page.tsx          — Assembles all sections
+  globals.css       — Design tokens, Tailwind v4 theme
+components/
+  Navbar.tsx        — Sticky nav with scroll-aware border
+  Footer.tsx        — Minimal footer
+  ThemeToggle.tsx   — Light/dark toggle
+  sections/
+    Hero.tsx
+    Projects.tsx
+    Skills.tsx
+    Hackathons.tsx
+    Contact.tsx
+lib/
+  data.ts           — All site content (projects, skills, hackathons)
+  utils.ts          — cn() helper
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Content
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+All site content lives in `lib/data.ts`. To update projects, skills, or hackathon entries, edit that file — no other files need to change.
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+All rights reserved. Not open for reuse without permission.
