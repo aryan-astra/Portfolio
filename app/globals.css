@@ -29,7 +29,7 @@
     --radius-xl: calc(var(--radius) * 1.4);
     --font-sans: var(--font-sans);
     --font-serif: var(--font-serif);
-    --font-mono: var(--font-mono);
+    --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
 :root {
