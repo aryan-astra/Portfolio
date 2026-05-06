@@ -1,5 +1,8 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useRef, useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { ArrowUpRight } from "@phosphor-icons/react";
 
 const fadeUp = {
@@ -13,72 +16,40 @@ const trans = (delay: number) => ({
   delay,
 });
 
-const SUPPORT_TEXT =
-  "I'm Aryan. I build systems, interfaces, and offline tools with real users. Sometimes they work. Sometimes they break. Both are useful.";
-
-const HINT_LINES = [
-  '> type "help" to explore',
-  '> type "open arch-srm"',
-  "> blue cursor means live mode",
-];
-
-const INITIAL_ART = [
-  "ARYAN.SHUKLA :: LIVE TERMINAL",
-  "SYSTEM MODE: interactive",
-  "STATUS: waiting for first command",
-  " ",
-  "type help to get started",
-];
-
-const ART_LINE_COLORS = [
-  "text-foreground",
-  "text-muted-foreground",
-  "text-muted-foreground",
-  "text-muted-foreground",
-  "text-accent-blue",
-];
-
-const sleep = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
-
-type EyeDirection = { x: -1 | 0 | 1; y: -1 | 0 | 1 };
-
-const positionFromOffset = (offset: number): -1 | 0 | 1 => {
-  if (offset < -0.25) return -1;
-  if (offset > 0.25) return 1;
-  return 0;
-};
-
-const buildEye = (direction: EyeDirection, blink: boolean) => {
-  if (blink) return " --- ";
-
-  const cols = [".", ".", "."];
-  const rowTone = direction.y === -1 ? "^" : direction.y === 1 ? "_" : "o";
-  cols[direction.x + 1] = rowTone;
-  return ` ${cols.join("")} `;
-};
+const HELP_TEXT = `Available commands:
+  help              - show this message
+  whoami            - display user info
+  ls                - list projects
+  open <slug>       - open a project
+  stack             - view tech stack
+  cat resume        - open resume
+  hack              - hackathon history
+  blog              - view blog
+  contact           - contact info
+  matrix            - retro effect
+  rm -rf /          - joke
+  sudo              - sudo pls
+  git log           - commit log
+  clear             - clear terminal`;
 
 export default function Hero() {
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  // Terminal State
-  const [input, setInput] = useState("");
-  const [history, setHistory] = useState<{ input: string; output: string | ReactNode; id: number }[]>([]);
-  const [artLines, setArtLines] = useState(INITIAL_ART);
-  const [phase, setPhase] = useState<"idle" | "erasing" | "eyes">("idle");
-  const [eyeDirection, setEyeDirection] = useState<EyeDirection>({ x: 0, y: 0 });
-  const [blink, setBlink] = useState(false);
+  const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
+  const [input, setInput] = useState("");
+  const [history, setHistory] = useState<Array<{ cmd: string; out: string; id: number }>>([]);
+  const [matrixActive, setMatrixActive] = useState(false);
 
   useEffect(() => {
     const handleGlobalKeydown = (e: KeyboardEvent) => {
-      // Don't focus if typing in another input or if it's a modifier key
       if (
-        document.activeElement?.tagName === "INPUT" || 
+        document.activeElement?.tagName === "INPUT" ||
         document.activeElement?.tagName === "TEXTAREA" ||
-        e.metaKey || e.ctrlKey || e.altKey
-      ) return;
-
+        e.metaKey ||
+        e.ctrlKey ||
+        e.altKey
+      )
+        return;
       inputRef.current?.focus();
     };
     window.addEventListener("keydown", handleGlobalKeydown);
@@ -86,111 +57,71 @@ export default function Hero() {
   }, []);
 
   useEffect(() => {
-    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setReducedMotion(query.matches);
-    sync();
-    query.addEventListener("change", sync);
-    return () => query.removeEventListener("change", sync);
-  }, []);
-
-  useEffect(() => {
     if (terminalRef.current) {
       terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
     }
-  }, [history, artLines, phase]);
+  }, [history]);
 
-  useEffect(() => {
-    if (phase !== "eyes") return;
+  const handleCommand = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== "Enter") return;
 
-    const timer = window.setInterval(() => {
-      setBlink(true);
-      window.setTimeout(() => setBlink(false), 120);
-    }, 2600);
-
-    return () => window.clearInterval(timer);
-  }, [phase]);
-
-  useEffect(() => {
-    if (phase !== "eyes") return;
-
-    const handleMove = (event: MouseEvent) => {
-      const panel = terminalRef.current;
-      if (!panel) return;
-
-      const rect = panel.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const dx = (event.clientX - centerX) / (rect.width / 2 || 1);
-      const dy = (event.clientY - centerY) / (rect.height / 2 || 1);
-
-      setEyeDirection({
-        x: positionFromOffset(dx),
-        y: positionFromOffset(dy),
-      });
-    };
-
-    window.addEventListener("mousemove", handleMove);
-    return () => window.removeEventListener("mousemove", handleMove);
-  }, [phase]);
-
-  const eyeArt = useMemo(() => {
-    const eye = buildEye(eyeDirection, blink);
-    return [
-      "      .---------------------------.",
-      "      |      system awake         |",
-      `      |   [${eye}] [${eye}]   |`,
-      "      |   move cursor: eyes track |",
-      "      '---------------------------'",
-    ];
-  }, [blink, eyeDirection]);
-
-  const handleCommand = async (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== "Enter" || phase === "erasing") return;
-
-    const typed = input.trim();
-    if (typed === "") return;
+    const cmd = input.trim().toLowerCase();
+    if (!cmd) return;
 
     setInput("");
 
-    // Command logic
-    let outputStr = `command not found: ${typed}`;
-    if (typed.toLowerCase() === "help") {
-      outputStr = "Available commands:\nhelp\nwhoami\nclear\nls\nopen <project-slug>";
-    } else if (typed.toLowerCase() === "whoami") {
-      outputStr = "aryan shukla - builder";
-    } else if (typed.toLowerCase() === "clear") {
+    let out = `command not found: ${cmd}`;
+
+    if (cmd === "help") {
+      out = HELP_TEXT;
+    } else if (cmd === "whoami") {
+      out = "aryan shukla\nbuilder, pwas, ai agents, tools\ncse @ srmist";
+    } else if (cmd === "clear") {
       setHistory([]);
       return;
-    } else if (typed.toLowerCase() === "ls") {
-      outputStr = "projects/  skills/  writing/  resume.pdf";
-    } else if (typed.toLowerCase().startsWith("open ")) {
-      outputStr = `opening ${typed.slice(5).trim()}...`;
+    } else if (cmd === "ls") {
+      out = "arch-srm/  voco/  maxq/  monosect/  modus/  ratify/  img-market/";
+    } else if (cmd.startsWith("open ")) {
+      const slug = cmd.slice(5).trim();
+      router.push(`/projects/${slug}`);
+      out = `→ opening /projects/${slug}`;
+    } else if (cmd === "stack") {
+      out = "typescript nextjs tailwind react framer-motion\nphosphor-icons vercel node firebase";
+    } else if (cmd === "cat resume") {
+      window.open("/resume.pdf");
+      out = "→ opening resume...";
+    } else if (cmd === "hack") {
+      out = "hackathon history:\n2024-10: voco (100+ users)\n2024-08: arch-srm (48h build)";
+    } else if (cmd === "blog") {
+      router.push("/writing");
+      out = "→ opening blog...";
+    } else if (cmd === "contact") {
+      out = "email: aryan@aryans.is-a.dev\ngithub: aryan-astra\ntwitter: @aryans_ideas";
+    } else if (cmd === "matrix") {
+      setMatrixActive(true);
+      out = "initiating...";
+      setTimeout(() => setMatrixActive(false), 2000);
+    } else if (cmd === "rm -rf /") {
+      out = "rm: Permission denied (root filesystem protected)";
+    } else if (cmd === "sudo") {
+      out = "aryan is not in the sudoers file. This incident will be reported.";
+    } else if (cmd === "git log") {
+      out = "2988f34 - feat(cursor): butterfly.so glowing cursor trail\n76a1c8d - feat: phase 0 setup complete\nmore commits...";
     }
 
-    setHistory((prev) => [...prev, { input: typed, output: outputStr, id: Date.now() }]);
-
-    // Trigger erase animation if this is the first command
-    if (phase === "idle") {
-      setPhase("erasing");
-      const currentLines = [...INITIAL_ART];
-      for (let i = 0; i < INITIAL_ART.length; i++) {
-        await sleep(80);
-        currentLines.pop();
-        setArtLines([...currentLines]);
-      }
-      setPhase("eyes");
-    }
+    setHistory((prev) => [...prev, { cmd: input.trim(), out, id: Date.now() }]);
   };
 
   const scrollToFeatured = () => {
-    document.getElementById("featured")?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
+    document.getElementById("featured")?.scrollIntoView({
+      behavior: "smooth",
+    });
   };
 
   return (
-    <section className="relative min-h-[calc(100svh-3.5rem)] overflow-hidden" id="hero" aria-label="Hero">
-      <div className="content-shell relative z-10 grid min-h-[calc(100svh-3.5rem)] grid-cols-1 xl:grid-cols-2 items-center gap-10 xl:gap-16 py-[clamp(1.75rem,7vh,4.5rem)]">
-        
-        {/* Left Column - Copy */}
+    <section className="relative min-h-[calc(100svh-3.5rem)] overflow-hidden" id="hero">
+      <div className="content-shell relative z-10 grid min-h-[calc(100svh-3.5rem)] grid-cols-1 md:grid-cols-[1fr_1fr] items-center gap-10 md:gap-12 py-[clamp(1.75rem,7vh,4.5rem)]">
+        {/* Left: Intro */}
         <div className="flex flex-col justify-center max-w-[45rem]">
           <motion.h1
             initial={fadeUp.initial}
@@ -207,7 +138,7 @@ export default function Hero() {
             transition={trans(0.22)}
             className="mt-7 max-w-[37rem] text-[1.04rem] leading-[1.8] text-muted-foreground"
           >
-            {SUPPORT_TEXT}
+            CSE student at SRMIST. I build PWAs, Android apps, offline AI agents, and tools that get used daily.
           </motion.p>
 
           <motion.div
@@ -228,116 +159,78 @@ export default function Hero() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-sm bg-transparent border border-border px-6 py-3 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted"
             >
-              GitHub <ArrowUpRight size={14} aria-hidden="true" />
+              GitHub <ArrowUpRight size={14} />
             </a>
           </motion.div>
         </div>
 
-        {/* Right Column - Terminal / Eyes */}
+        {/* Right: Terminal */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
-          className="w-full h-full min-h-[400px] flex flex-col relative"
+          transition={{ duration: 1, delay: 0.3 }}
+          className="relative w-full h-full min-h-[500px] flex flex-col"
         >
-          <div 
-            className="flex-1 overflow-y-auto p-6 font-mono text-xs text-muted-foreground flex flex-col gap-4 custom-scrollbar bg-transparent border-none"
-            ref={terminalRef}
-            onClick={() => inputRef.current?.focus()}
-          >
-            {/* Visual Header / Art Area */}
-            <div className="flex justify-center items-center min-h-[220px] relative">
-              {phase !== "eyes" ? (
-                <div className="w-full max-w-[28rem] font-mono text-[11px] sm:text-xs leading-relaxed">
-                  <AnimatePresence mode="popLayout">
-                    {artLines.map((line, idx) => (
-                      <motion.div
-                        key={`${line}-${idx}`}
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.2, ease: "easeOut" }}
-                        className={ART_LINE_COLORS[idx] ?? "text-accent-blue"}
-                      >
-                        {line || "\u00A0"}
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
-                </div>
-              ) : (
-                <div className="w-full max-w-[28rem] font-mono text-[11px] sm:text-xs leading-relaxed">
-                  {eyeArt.map((line, idx) => (
-                    <div key={`${line}-${idx}`} className="text-foreground">
-                      {line}
-                    </div>
-                  ))}
-                </div>
-              )}
+          {/* Terminal Box */}
+          <div className="relative flex-1 border border-border rounded-lg bg-background/30 backdrop-blur-sm overflow-hidden flex flex-col">
+            {/* Header */}
+            <div className="border-b border-border px-4 py-3 flex items-center gap-2 bg-background/50">
+              <div className="flex gap-2">
+                <div className="w-3 h-3 rounded-full bg-red-500/70" />
+                <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
+                <div className="w-3 h-3 rounded-full bg-green-500/70" />
+              </div>
+              <span className="ml-2 text-[11px] font-mono text-muted-foreground">aryan@portfolio:~</span>
             </div>
 
-            {/* Hint Lines */}
-            <div className="text-[12px] leading-[1.6]">
-              {HINT_LINES.map((line) => (
-                <p key={line}>{line}</p>
-              ))}
-            </div>
+            {/* Content */}
+            <div
+              ref={terminalRef}
+              className="flex-1 overflow-y-auto p-4 font-mono text-xs text-muted-foreground space-y-2 custom-scrollbar"
+              onClick={() => inputRef.current?.focus()}
+            >
+              <div className="text-accent-blue">
+                Type <span className="text-foreground">"help"</span> to explore · Terminal is live
+              </div>
 
-            {/* History */}
-            <div className="flex flex-col gap-3">
-              {history.map((cmd) => (
-                <div key={cmd.id}>
-                  <div className="flex items-start gap-2 break-all text-muted-foreground">
-                    <span className="shrink-0 text-accent-blue">aryan@portfolio:~$</span>
-                    <span className="text-foreground">{cmd.input}</span>
+              {history.map((entry) => (
+                <div key={entry.id}>
+                  <div className="flex items-start gap-2">
+                    <span className="text-accent-blue shrink-0">$</span>
+                    <span className="text-foreground">{entry.cmd}</span>
                   </div>
-                  {cmd.output && (
-                    <div className="mt-1 leading-relaxed text-muted-foreground">
-                      {typeof cmd.output === "string" ? (
-                        cmd.output.split("\n").map((line, idx, all) => (
-                          <motion.div
-                            key={`${cmd.id}-${idx}`}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.2, delay: (all.length - idx - 1) * 0.06 }}
-                            className="whitespace-pre-wrap"
-                          >
-                            {line}
-                          </motion.div>
-                        ))
-                      ) : (
-                        cmd.output
-                      )}
-                    </div>
-                  )}
+                  <div className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                    {entry.out}
+                  </div>
                 </div>
               ))}
-            </div>
 
-            {/* Input Line */}
-            <div className="mt-auto flex items-center gap-2 pt-1">
-              <span className="shrink-0 text-accent-blue">aryan@portfolio:~$</span>
-              <div className="relative flex flex-1 items-center">
+              {/* Active input */}
+              <div className="flex items-center gap-2 pt-2">
+                <span className="text-accent-blue shrink-0">$</span>
                 <input
                   ref={inputRef}
                   type="text"
                   value={input}
-                  onChange={(event) => setInput(event.target.value)}
+                  onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleCommand}
-                    className="z-10 w-full border-none bg-transparent font-mono text-[12px] text-foreground outline-none sm:text-[13px] caret-accent-blue"
-                  spellCheck={false}
-                  autoComplete="off"
-                  aria-label="Terminal input"
-                  disabled={phase === "erasing"}
-                  style={{ caretColor: "transparent" }}
+                  placeholder=""
+                  className="flex-1 bg-transparent outline-none text-foreground placeholder-muted-foreground/40 w-full"
+                  autoFocus
+                  spellCheck="false"
                 />
-                {input === "" && (
-                  <span className="pointer-events-none absolute left-0 text-[#2563EB] cursor-blink">▮</span>
-                )}
+                {!input && <span className="text-accent-blue/50 animate-pulse">_</span>}
               </div>
             </div>
           </div>
-        </motion.div>
 
+          {/* Matrix effect (overlay) */}
+          {matrixActive && (
+            <div className="absolute inset-0 border border-highlight rounded-lg pointer-events-none">
+              <div className="inset-0 absolute animate-pulse" style={{ background: "rgba(37, 99, 235, 0.15)" }} />
+            </div>
+          )}
+        </motion.div>
       </div>
     </section>
   );

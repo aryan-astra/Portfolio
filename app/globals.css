@@ -131,6 +131,10 @@
     border-radius: 4px;
 }
 
+.custom-cursor-active * {
+    cursor: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .cursor-blink {
         animation: none !important;
