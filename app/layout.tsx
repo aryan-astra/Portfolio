@@ -5,6 +5,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ButterflyBackground from "@/components/ButterflyBackground";
+import CustomCursor from "@/components/CustomCursor";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -59,6 +60,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col bg-background text-foreground antialiased relative overflow-x-clip">
         <ButterflyBackground />
+        <CustomCursor />
         <Navbar />
         <main className="flex-1 relative z-10" id="main-content">
           {children}
