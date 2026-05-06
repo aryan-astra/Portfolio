@@ -241,7 +241,7 @@ export default function Hero() {
           className="w-full h-full min-h-[400px] flex flex-col relative"
         >
           <div 
-            className="flex-1 overflow-y-auto rounded-lg border border-border bg-card/40 p-6 font-mono text-xs text-muted-foreground flex flex-col gap-4 custom-scrollbar"
+            className="flex-1 overflow-y-auto p-6 font-mono text-xs text-muted-foreground flex flex-col gap-4 custom-scrollbar bg-transparent border-none"
             ref={terminalRef}
             onClick={() => inputRef.current?.focus()}
           >
@@ -323,7 +323,7 @@ export default function Hero() {
                   value={input}
                   onChange={(event) => setInput(event.target.value)}
                   onKeyDown={handleCommand}
-                  className="z-10 w-full border-none bg-transparent font-mono text-[12px] text-foreground outline-none sm:text-[13px]"
+                    className="z-10 w-full border-none bg-transparent font-mono text-[12px] text-foreground outline-none sm:text-[13px] caret-accent-blue"
                   spellCheck={false}
                   autoComplete="off"
                   aria-label="Terminal input"
