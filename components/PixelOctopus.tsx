@@ -132,22 +132,22 @@ export default function PixelOctopus() {
         transition={{ repeat: Infinity, duration: isMoving ? 1.2 : 2.5, ease: "easeInOut" }}
         className="relative"
       >
-        <svg viewBox="0 0 90 90" className="h-12 w-12 drop-shadow-[0_8px_18px_rgba(88,28,135,0.34)]">
+        <svg viewBox="0 0 90 90" className="h-14 w-14 drop-shadow-[0_8px_18px_rgba(213,63,140,0.34)]">
           <defs>
             <radialGradient id="octoBody" cx="36%" cy="26%" r="70%">
-              <stop offset="0%" stopColor="#ede9fe" />
-              <stop offset="36%" stopColor="#c4b5fd" />
-              <stop offset="72%" stopColor="#8b5cf6" />
-              <stop offset="100%" stopColor="#6d28d9" />
+              <stop offset="0%" stopColor="#ffe4ef" />
+              <stop offset="36%" stopColor="#fbb6ce" />
+              <stop offset="72%" stopColor="#f687b3" />
+              <stop offset="100%" stopColor="#d53f8c" />
             </radialGradient>
           </defs>
 
           <ellipse cx="45" cy="36" rx="24" ry="21" fill="url(#octoBody)" />
 
-          <path d="M26 49c-7 4-9 9-9 14 0 5 3 8 7 8 4 0 8-3 9-7" stroke="#7e22ce" strokeWidth="4" strokeLinecap="round" fill="none" />
-          <path d="M36 52c-5 4-6 8-6 12 0 5 3 8 6 8 4 0 7-3 7-7" stroke="#7e22ce" strokeWidth="4" strokeLinecap="round" fill="none" />
-          <path d="M54 52c5 4 6 8 6 12 0 5-3 8-6 8-4 0-7-3-7-7" stroke="#7e22ce" strokeWidth="4" strokeLinecap="round" fill="none" />
-          <path d="M64 49c7 4 9 9 9 14 0 5-3 8-7 8-4 0-8-3-9-7" stroke="#7e22ce" strokeWidth="4" strokeLinecap="round" fill="none" />
+          <path d="M26 49c-7 4-9 9-9 14 0 5 3 8 7 8 4 0 8-3 9-7" stroke="#b83280" strokeWidth="4" strokeLinecap="round" fill="none" />
+          <path d="M36 52c-5 4-6 8-6 12 0 5 3 8 6 8 4 0 7-3 7-7" stroke="#b83280" strokeWidth="4" strokeLinecap="round" fill="none" />
+          <path d="M54 52c5 4 6 8 6 12 0 5-3 8-6 8-4 0-7-3-7-7" stroke="#b83280" strokeWidth="4" strokeLinecap="round" fill="none" />
+          <path d="M64 49c7 4 9 9 9 14 0 5-3 8-7 8-4 0-8-3-9-7" stroke="#b83280" strokeWidth="4" strokeLinecap="round" fill="none" />
 
           <ellipse cx="37" cy="35" rx="7" ry="8" fill="#ffffff" />
           <ellipse cx="53" cy="35" rx="7" ry="8" fill="#ffffff" />
