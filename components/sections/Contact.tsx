@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ExternalLink, Mail } from "lucide-react";
+import { ArrowUpRight, Envelope } from "@phosphor-icons/react";
 import MagneticGlowCard from "@/components/MagneticGlowCard";
 
 const fadeUp = {
@@ -39,7 +39,7 @@ export default function Contact() {
               id="contact-email"
               className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-sans"
             >
-              <Mail
+              <Envelope
                 size={14}
                 aria-hidden="true"
                 className="shrink-0 text-muted-foreground group-hover:text-accent-blue transition-colors"
@@ -61,7 +61,7 @@ export default function Contact() {
               <span className="text-[0.97rem] text-muted-foreground group-hover:text-foreground transition-colors duration-200">
                 github.com/aryan-astra
               </span>
-              <ExternalLink size={12} aria-hidden="true" className="shrink-0 text-muted-foreground" />
+              <ArrowUpRight size={12} aria-hidden="true" className="shrink-0 text-muted-foreground" />
             </a>
           </MagneticGlowCard>
 
@@ -73,7 +73,7 @@ export default function Contact() {
               id="contact-resume"
               className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-sans"
             >
-              <ExternalLink
+              <ArrowUpRight
                 size={14}
                 aria-hidden="true"
                 className="shrink-0 text-muted-foreground group-hover:text-accent-blue transition-colors"

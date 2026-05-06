@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "@phosphor-icons/react";
 import { projects } from "@/lib/data";
 import MagneticGlowCard from "@/components/MagneticGlowCard";
 

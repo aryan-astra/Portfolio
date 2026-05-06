@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { ExternalLink } from "lucide-react";
+import { ArrowUpRight } from "@phosphor-icons/react";
 
 const fadeUp = {
   initial: { opacity: 0, y: 18 },
@@ -228,7 +228,7 @@ export default function Hero() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-sm bg-transparent border border-border px-6 py-3 text-sm font-medium text-foreground transition-colors duration-200 hover:bg-muted"
             >
-              GitHub <ExternalLink size={14} aria-hidden="true" />
+              GitHub <ArrowUpRight size={14} aria-hidden="true" />
             </a>
           </motion.div>
         </div>
