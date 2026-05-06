@@ -2,115 +2,108 @@
 
 import { useEffect, useRef } from "react";
 
-interface Bloom {
-  x: number;
-  y: number;
-  size: number;
-  color: string;
-  alpha: number;
-  life: number;
-}
-
 export default function ButterflyBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mousePos = useRef({ x: 0, y: 0 });
-  const blooms = useRef<Bloom[]>([]);
 
   useEffect(() => {
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const handleResize = () => {
+    type Particle = {
+      x: number;
+      y: number;
+      alpha: number;
+      radius: number;
+    };
+
+    const trail: Particle[] = [];
+    let mouseX = -999;
+    let mouseY = -999;
+    let rafId = 0;
+
+    const resize = () => {
       const dpr = window.devicePixelRatio || 1;
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
       ctx.scale(dpr, dpr);
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mousePos.current = { x: e.clientX, y: e.clientY };
-      
-      // Add new bloom occasionally on move
-      if (Math.random() > 0.8) {
-        const colors = ["#ff9aa2", "#b5ead7", "#c7ceea", "#ffdac1", "#e2f0cb"];
-        blooms.current.push({
-          x: e.clientX,
-          y: e.clientY,
-          size: 40 + Math.random() * 60,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          alpha: 0.3,
-          life: 1.0
-        });
-      }
+    const onMouseMove = (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      trail.push({
+        x: mouseX,
+        y: mouseY,
+        alpha: 1.0,
+        radius: 4,
+      });
+      if (trail.length > 28) trail.shift();
     };
-
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("mousemove", handleMouseMove);
-    handleResize();
 
     const draw = () => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      ctx.clearRect(0, 0, w, h);
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-      // 1. Draw Dot Grid (Subtle Warm)
-      const dotSpacing = 32;
-      ctx.fillStyle = "rgba(180, 160, 140, 0.15)";
-      for (let x = 0; x < w; x += dotSpacing) {
-        for (let y = 0; y < h; y += dotSpacing) {
-          ctx.beginPath();
-          ctx.arc(x, y, 1, 0, Math.PI * 2);
-          ctx.fill();
+      for (let i = trail.length - 1; i >= 0; i--) {
+        const p = trail[i];
+        p.alpha -= 0.038;
+        p.radius = 4 * p.alpha;
+
+        if (p.alpha <= 0) {
+          trail.splice(i, 1);
+          continue;
         }
+
+        const isHead = i === trail.length - 1;
+
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, Math.max(p.radius, 0.5), 0, Math.PI * 2);
+
+        if (isHead) {
+          ctx.fillStyle = getComputedStyle(document.documentElement)
+            .getPropertyValue("--highlight")
+            .trim() || "#2563EB";
+          ctx.shadowColor = ctx.fillStyle;
+          ctx.shadowBlur = 12;
+        } else {
+          ctx.fillStyle = getComputedStyle(document.documentElement)
+            .getPropertyValue("--foreground")
+            .trim() || "#1A1816";
+          ctx.shadowBlur = 0;
+        }
+
+        ctx.fill();
+        ctx.restore();
       }
 
-      // 2. Update and Draw Blooms
-      ctx.globalCompositeOperation = "screen";
-      blooms.current = blooms.current.filter((b) => b.life > 0);
-      blooms.current.forEach((b) => {
-        b.life -= 0.01;
-        b.alpha = b.life * 0.3;
-        
-        const alphaHex = Math.max(0, Math.floor(b.alpha * 255)).toString(16).padStart(2, '0');
-        const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.size);
-        grad.addColorStop(0, b.color + alphaHex);
-        grad.addColorStop(1, "transparent");
-
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, b.size, 0, Math.PI * 2);
-        ctx.fill();
-      });
-      ctx.globalCompositeOperation = "source-over";
-
-      // 3. Main Mouse Halo
-      const haloGrad = ctx.createRadialGradient(
-        mousePos.current.x, mousePos.current.y, 0,
-        mousePos.current.x, mousePos.current.y, 180
-      );
-      haloGrad.addColorStop(0, "rgba(255, 245, 230, 0.15)");
-      haloGrad.addColorStop(1, "transparent");
-      ctx.fillStyle = haloGrad;
-      ctx.fillRect(0, 0, w, h);
-
-      requestAnimationFrame(draw);
+      rafId = requestAnimationFrame(draw);
     };
 
-    draw();
+    resize();
+    window.addEventListener("resize", resize);
+    window.addEventListener("mousemove", onMouseMove);
+    rafId = requestAnimationFrame(draw);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", onMouseMove);
+      cancelAnimationFrame(rafId);
     };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none -z-10"
-      style={{ filter: "blur(12px) contrast(1.1)" }}
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 z-[100]"
+      style={{ mixBlendMode: "normal" }}
     />
   );
 }
