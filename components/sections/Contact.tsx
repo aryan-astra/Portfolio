@@ -1,61 +1,98 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Mail } from "lucide-react";
+import MagneticGlowCard from "@/components/MagneticGlowCard";
 
-const sectionVariants = {
+const fadeUp = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 },
 };
 
 export default function Contact() {
   return (
-    <section id="contact" className="py-32 md:py-40">
-      <div className="max-w-5xl mx-auto px-6 text-center">
+    <section id="contact" className="section-block">
+      <div className="content-shell">
         <motion.div
-          variants={sectionVariants}
-          initial="hidden"
+          variants={fadeUp}
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}
+          className="mb-10"
         >
-          <h2 className="font-serif text-5xl md:text-7xl font-normal tracking-tight text-foreground mb-4">
+          <p className="mb-2 font-mono text-[0.68rem] tracking-[0.22em] text-muted-foreground">CONTACT</p>
+          <h2 className="max-w-[16ch] font-serif text-[clamp(2.05rem,4vw,3.2rem)] leading-[1.02] tracking-[-0.01em] text-foreground">
             Let&apos;s talk.
           </h2>
-          <p className="font-sans text-base text-muted-foreground leading-relaxed mb-12">
-            I&apos;m always open to interesting problems.
-          </p>
         </motion.div>
 
         <motion.div
-          variants={sectionVariants}
-          initial="hidden"
+          variants={fadeUp}
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5, ease: "easeOut", delay: 0.15 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10"
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5, ease: "easeOut", delay: 0.12 }}
+          className="flex flex-col sm:flex-row flex-wrap gap-4"
         >
-          <a
-            href="mailto:ryanxastra@gmail.com"
-            className="inline-flex items-center gap-1.5 font-mono text-sm text-muted-foreground hover:text-foreground hover:underline transition-colors duration-200"
-          >
-            ryanxastra@gmail.com
-            <ExternalLink size={12} aria-hidden="true" />
-          </a>
+          <MagneticGlowCard>
+            <a
+              href="mailto:ryanxastra@gmail.com"
+              id="contact-email"
+              className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-sans"
+            >
+              <Mail
+                size={14}
+                aria-hidden="true"
+                className="shrink-0 text-muted-foreground group-hover:text-accent-blue transition-colors"
+              />
+              <span className="text-[0.97rem] text-muted-foreground group-hover:text-foreground transition-colors duration-200">
+                ryanxastra@gmail.com
+              </span>
+            </a>
+          </MagneticGlowCard>
 
-          <a
-            href="https://github.com/aryan-astra"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 font-mono text-sm text-muted-foreground hover:text-foreground hover:underline transition-colors duration-200"
-          >
-            github.com/aryan-astra
-            <span aria-hidden="true">↗</span>
-          </a>
+          <MagneticGlowCard>
+            <a
+              href="https://github.com/aryan-astra"
+              target="_blank"
+              rel="noopener noreferrer"
+              id="contact-github"
+              className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-sans"
+            >
+              <span className="text-[0.97rem] text-muted-foreground group-hover:text-foreground transition-colors duration-200">
+                github.com/aryan-astra
+              </span>
+              <ExternalLink size={12} aria-hidden="true" className="shrink-0 text-muted-foreground" />
+            </a>
+          </MagneticGlowCard>
 
-          <span className="font-mono text-sm text-muted-foreground">
-            SRMIST, Chennai
-          </span>
+          <MagneticGlowCard>
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              id="contact-resume"
+              className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-sans"
+            >
+              <ExternalLink
+                size={14}
+                aria-hidden="true"
+                className="shrink-0 text-muted-foreground group-hover:text-accent-blue transition-colors"
+              />
+              <span className="text-[0.97rem] text-muted-foreground group-hover:text-foreground transition-colors duration-200">
+                Resume
+              </span>
+            </a>
+          </MagneticGlowCard>
+        </motion.div>
+
+        <motion.div
+          variants={fadeUp}
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5, ease: "easeOut", delay: 0.22 }}
+          className="mt-8"
+        >
+          <p className="font-mono text-[0.65rem] text-muted-foreground">// SRMIST, Chennai · India</p>
         </motion.div>
       </div>
     </section>

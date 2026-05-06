@@ -1,29 +1,68 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { Moon, Sun } from "lucide-react";
 
-function getInitialTheme(): boolean {
-  if (typeof window === "undefined") return false;
-  return localStorage.getItem("theme") === "dark";
+function subscribe(onStoreChange: () => void) {
+  if (typeof window === "undefined") {
+    return () => {};
+  }
+
+  const onThemeChange = () => onStoreChange();
+  window.addEventListener("storage", onThemeChange);
+  window.addEventListener("themechange", onThemeChange);
+
+  return () => {
+    window.removeEventListener("storage", onThemeChange);
+    window.removeEventListener("themechange", onThemeChange);
+  };
+}
+
+function getThemeSnapshot() {
+  if (typeof document === "undefined") {
+    return false;
+  }
+
+  return document.documentElement.classList.contains("dark");
 }
 
 export default function ThemeToggle() {
-  const [isDark, setIsDark] = useState<boolean>(getInitialTheme);
+  const [override, setOverride] = useState<boolean | null>(null);
+  const mounted = useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  );
+  const systemTheme = useSyncExternalStore(
+    subscribe,
+    getThemeSnapshot,
+    () => false,
+  );
+  const isDark = override ?? systemTheme;
 
-  const toggle = useCallback(() => {
-    setIsDark((prev) => {
-      const next = !prev;
-      if (next) {
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("theme", "dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-        localStorage.setItem("theme", "light");
-      }
-      return next;
-    });
-  }, []);
+  const toggle = () => {
+    const next = !isDark;
+    setOverride(next);
+    if (next) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+    window.dispatchEvent(new Event("themechange"));
+  };
+
+  if (!mounted) {
+    return (
+      <button
+        aria-hidden="true"
+        className="p-2 rounded-md text-muted-foreground opacity-0"
+      >
+        <Sun size={15} />
+      </button>
+    );
+  }
 
   return (
     <button

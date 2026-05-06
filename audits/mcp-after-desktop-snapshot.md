@@ -1,0 +1,362 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation "Main navigation" [ref=e3]:
+      - button "Scroll to top" [ref=e5]: aryan.
+      - generic [ref=e6]:
+        - link "Work" [ref=e7] [cursor=pointer]:
+          - /url: "#featured"
+        - link "Projects" [ref=e8] [cursor=pointer]:
+          - /url: "#projects"
+        - link "Stack" [ref=e9] [cursor=pointer]:
+          - /url: "#skills"
+        - link "Hackathons" [ref=e10] [cursor=pointer]:
+          - /url: "#hackathons"
+        - link "Writing" [ref=e11] [cursor=pointer]:
+          - /url: "#writing"
+        - link "Contact" [ref=e12] [cursor=pointer]:
+          - /url: "#contact"
+        - button "Switch to dark mode" [ref=e444]:
+          - img [ref=e445]
+  - main [ref=e20]:
+    - generic [ref=e21]:
+      - region "Hero" [ref=e22]:
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - heading "I build things that people actually use." [level=1] [ref=e25]
+            - paragraph [ref=e26]: I'm Aryan. I build systems, interfaces, and offline tools with real users. Sometimes they work. Sometimes they break. Both are useful.
+            - generic [ref=e27]:
+              - button "View my work →" [ref=e28]
+              - link "GitHub" [ref=e29] [cursor=pointer]:
+                - /url: https://github.com/aryan-astra
+                - text: GitHub
+                - img [ref=e30]
+          - generic [ref=e35]:
+            - generic [ref=e37]:
+              - generic [ref=e38]: "ARYAN.SHUKLA :: LIVE TERMINAL"
+              - generic [ref=e39]: "SYSTEM MODE: interactive"
+              - generic [ref=e40]: "STATUS: waiting for first command"
+              - generic [ref=e41]: type help to get started
+            - generic [ref=e42]:
+              - paragraph [ref=e43]: "> type \"help\" to explore"
+              - paragraph [ref=e44]: "> type \"open arch-srm\""
+              - paragraph [ref=e45]: "> blue cursor means live mode"
+            - generic [ref=e46]:
+              - generic [ref=e47]: aryan@portfolio:~$
+              - generic [ref=e48]:
+                - textbox "Terminal input" [ref=e49]
+                - generic: ▮
+      - generic [ref=e51]:
+        - generic [ref=e52]:
+          - paragraph [ref=e53]: FEATURED WORK
+          - heading "Proof of work." [level=2] [ref=e54]
+        - generic [ref=e55]:
+          - article [ref=e59]:
+            - generic [ref=e60]:
+              - heading "Arch SRM" [level=3] [ref=e61]
+              - img [ref=e63]
+            - paragraph [ref=e66]: 300+ daily active users at SRMIST.
+            - paragraph [ref=e68]: A student-first portal that replaced a broken official workflow.
+            - generic [ref=e69]:
+              - generic [ref=e70]: Next.js
+              - generic [ref=e71]: Cloudflare Workers
+              - generic [ref=e72]: Hono
+              - generic [ref=e73]: KV
+            - generic [ref=e74]:
+              - link "Read Arch SRM case study" [ref=e75] [cursor=pointer]:
+                - /url: /projects/arch-srm
+                - text: Case Study →
+              - link "View Arch SRM on GitHub" [ref=e76] [cursor=pointer]:
+                - /url: https://github.com/aryan-astra/arch-srm
+                - text: GitHub ↗
+              - link "View Arch SRM live" [ref=e77] [cursor=pointer]:
+                - /url: https://arch-srm.pages.dev
+                - text: Live ↗
+          - article [ref=e81]:
+            - generic [ref=e82]:
+              - heading "VOCO" [level=3] [ref=e83]
+              - img [ref=e85]
+            - paragraph [ref=e88]: Fully offline AI agent — no API keys needed.
+            - paragraph [ref=e90]: An offline automation agent that runs without cloud dependencies.
+            - generic [ref=e91]:
+              - generic [ref=e92]: Python
+              - generic [ref=e93]: Qwen3
+              - generic [ref=e94]: Playwright
+              - generic [ref=e95]: pyautogui
+            - generic [ref=e96]:
+              - link "Read VOCO case study" [ref=e97] [cursor=pointer]:
+                - /url: /projects/voco
+                - text: Case Study →
+              - link "View VOCO on GitHub" [ref=e98] [cursor=pointer]:
+                - /url: https://github.com/aryan-astra/voco
+                - text: GitHub ↗
+      - generic [ref=e100]:
+        - generic [ref=e101]:
+          - paragraph [ref=e102]: ALL PROJECTS
+          - heading "Things I've shipped." [level=2] [ref=e103]
+        - generic [ref=e104]:
+          - article [ref=e108]:
+            - heading "Arch SRM" [level=3] [ref=e110]
+            - paragraph [ref=e112]: A student-first portal that replaced a broken official workflow.
+            - generic [ref=e113]:
+              - generic [ref=e114]: Next.js
+              - generic [ref=e115]: Cloudflare Workers
+              - generic [ref=e116]: Hono
+              - generic [ref=e117]: KV
+              - generic [ref=e118]: PWA
+            - generic [ref=e119]:
+              - link "Read Arch SRM case study" [ref=e120] [cursor=pointer]:
+                - /url: /projects/arch-srm
+                - text: Case Study →
+              - link "View Arch SRM on GitHub" [ref=e121] [cursor=pointer]:
+                - /url: https://github.com/aryan-astra/arch-srm
+                - text: GitHub ↗
+              - link "View Arch SRM live" [ref=e122] [cursor=pointer]:
+                - /url: https://arch-srm.pages.dev
+                - text: Live ↗
+          - article [ref=e126]:
+            - heading "VOCO" [level=3] [ref=e128]
+            - paragraph [ref=e130]: An offline automation agent that runs without cloud dependencies.
+            - generic [ref=e131]:
+              - generic [ref=e132]: Python
+              - generic [ref=e133]: Qwen3
+              - generic [ref=e134]: Playwright
+              - generic [ref=e135]: pyautogui
+              - generic [ref=e136]: LLM
+            - generic [ref=e137]:
+              - link "Read VOCO case study" [ref=e138] [cursor=pointer]:
+                - /url: /projects/voco
+                - text: Case Study →
+              - link "View VOCO on GitHub" [ref=e139] [cursor=pointer]:
+                - /url: https://github.com/aryan-astra/voco
+                - text: GitHub ↗
+          - article [ref=e143]:
+            - heading "MaxQ" [level=3] [ref=e145]
+            - paragraph [ref=e147]: An Android player with shader-native reactive visuals.
+            - generic [ref=e148]:
+              - generic [ref=e149]: Kotlin
+              - generic [ref=e150]: Android
+              - generic [ref=e151]: AGSL
+              - generic [ref=e152]: Supabase
+            - generic [ref=e153]:
+              - link "Read MaxQ case study" [ref=e154] [cursor=pointer]:
+                - /url: /projects/maxq
+                - text: Case Study →
+              - link "View MaxQ on GitHub" [ref=e155] [cursor=pointer]:
+                - /url: https://github.com/aryan-astra/maxq
+                - text: GitHub ↗
+          - article [ref=e159]:
+            - generic [ref=e160]:
+              - heading "Monosect" [level=3] [ref=e161]
+              - generic [ref=e162]: shipped
+            - paragraph [ref=e164]: A desktop splitter for large videos with size-accurate cuts.
+            - generic [ref=e165]:
+              - generic [ref=e166]: C++23
+              - generic [ref=e167]: FFmpeg
+              - generic [ref=e168]: ImGui
+              - generic [ref=e169]: OpenGL
+              - generic [ref=e170]: MinGW
+            - generic [ref=e171]:
+              - link "Read Monosect case study" [ref=e172] [cursor=pointer]:
+                - /url: /projects/monosect
+                - text: Case Study →
+              - link "View Monosect on GitHub" [ref=e173] [cursor=pointer]:
+                - /url: https://github.com/aryan-astra/monosect
+                - text: GitHub ↗
+          - article [ref=e177]:
+            - heading "img-market" [level=3] [ref=e179]
+            - paragraph [ref=e181]: A photo marketplace with layered watermark protection.
+            - generic [ref=e182]:
+              - generic [ref=e183]: Next.js 15
+              - generic [ref=e184]: Cloudflare R2
+              - generic [ref=e185]: PostgreSQL
+              - generic [ref=e186]: Razorpay
+              - generic [ref=e187]: Hetzner
+            - link "Read img-market case study" [ref=e189] [cursor=pointer]:
+              - /url: /projects/img-market
+              - text: Case Study →
+          - article [ref=e193]:
+            - generic [ref=e194]:
+              - heading "ChatGPT Enhanced" [level=3] [ref=e195]
+              - generic [ref=e196]: archived
+            - paragraph [ref=e198]: A power-user extension built before native memory features existed.
+            - generic [ref=e199]:
+              - generic [ref=e200]: JavaScript
+              - generic [ref=e201]: Chrome Extension
+              - generic [ref=e202]: DOM
+            - generic [ref=e203]:
+              - link "Read ChatGPT Enhanced case study" [ref=e204] [cursor=pointer]:
+                - /url: /projects/chatgpt-enhanced
+                - text: Case Study →
+              - link "View ChatGPT Enhanced on GitHub" [ref=e205] [cursor=pointer]:
+                - /url: https://github.com/aryan-astra/chatgpt-enhanced
+                - text: GitHub ↗
+      - generic [ref=e207]:
+        - generic [ref=e208]:
+          - paragraph [ref=e209]: STACK
+          - heading "What I actually use." [level=2] [ref=e210]
+        - generic [ref=e211]:
+          - generic [ref=e214]:
+            - generic [ref=e215]:
+              - generic [ref=e216]: "{ }"
+              - paragraph [ref=e217]: Languages
+            - list [ref=e218]:
+              - listitem [ref=e219]:
+                - paragraph [ref=e220]: Kotlin
+              - listitem [ref=e221]:
+                - paragraph [ref=e222]: Python
+              - listitem [ref=e223]:
+                - paragraph [ref=e224]: TypeScript
+              - listitem [ref=e225]:
+                - paragraph [ref=e226]: C++
+              - listitem [ref=e227]:
+                - paragraph [ref=e228]: Java
+          - generic [ref=e231]:
+            - generic [ref=e232]:
+              - generic [ref=e233]: ⬡
+              - paragraph [ref=e234]: Frameworks
+            - list [ref=e235]:
+              - listitem [ref=e236]:
+                - paragraph [ref=e237]: Next.js
+              - listitem [ref=e238]:
+                - paragraph [ref=e239]: Android SDK
+              - listitem [ref=e240]:
+                - paragraph [ref=e241]: FastAPI
+              - listitem [ref=e242]:
+                - paragraph [ref=e243]: Hono
+          - generic [ref=e246]:
+            - generic [ref=e247]:
+              - generic [ref=e248]: ☁
+              - paragraph [ref=e249]: Cloud
+            - list [ref=e250]:
+              - listitem [ref=e251]:
+                - paragraph [ref=e252]: Cloudflare Workers
+              - listitem [ref=e253]:
+                - paragraph [ref=e254]: Cloudflare KV
+              - listitem [ref=e255]:
+                - paragraph [ref=e256]: Cloudflare R2
+              - listitem [ref=e257]:
+                - paragraph [ref=e258]: Vercel
+              - listitem [ref=e259]:
+                - paragraph [ref=e260]: Hetzner
+          - generic [ref=e263]:
+            - generic [ref=e264]:
+              - generic [ref=e265]: ⚙
+              - paragraph [ref=e266]: Tools
+            - list [ref=e267]:
+              - listitem [ref=e268]:
+                - paragraph [ref=e269]: Git
+              - listitem [ref=e270]:
+                - paragraph [ref=e271]: Supabase
+              - listitem [ref=e272]:
+                - paragraph [ref=e273]: PostgreSQL
+              - listitem [ref=e274]:
+                - paragraph [ref=e275]: FFmpeg
+              - listitem [ref=e276]:
+                - paragraph [ref=e277]: Playwright
+          - generic [ref=e280]:
+            - generic [ref=e281]:
+              - generic [ref=e282]: ◈
+              - paragraph [ref=e283]: Concepts
+            - list [ref=e284]:
+              - listitem [ref=e285]:
+                - paragraph [ref=e286]: PWA
+              - listitem [ref=e287]:
+                - paragraph [ref=e288]: Chrome Extensions
+              - listitem [ref=e289]:
+                - paragraph [ref=e290]: LLM Agents
+              - listitem [ref=e291]:
+                - paragraph [ref=e292]: AGSL Shaders
+              - listitem [ref=e293]:
+                - paragraph [ref=e294]: Webhook Auth
+      - generic [ref=e296]:
+        - generic [ref=e297]:
+          - paragraph [ref=e298]: HACKATHONS
+          - heading "Built under pressure." [level=2] [ref=e299]
+          - paragraph [ref=e301]: 4 events. Learnt something at every one.
+        - generic [ref=e302]:
+          - generic [ref=e303]:
+            - paragraph [ref=e305]: "2026"
+            - generic [ref=e311]:
+              - paragraph [ref=e312]: Guidewire DevTrails 2026
+              - heading "GigSafe" [level=3] [ref=e313]
+              - paragraph [ref=e314]: Gig worker income protection platform with real-time platform outage triggers, zone-based micro-pooling across Chennai, and an Income DNA risk model.
+              - generic [ref=e315]:
+                - paragraph [ref=e316]: "Team: Unfiltered Minds"
+                - generic [ref=e317]: Qualified further rounds
+          - generic [ref=e318]:
+            - paragraph [ref=e320]: "2026"
+            - generic [ref=e326]:
+              - paragraph [ref=e327]: Barclays Hack-O-Hire 2026
+              - heading "Barclays PIE" [level=3] [ref=e328]
+              - paragraph [ref=e329]: Pre-delinquency intervention engine for credit risk — flags at-risk accounts before default using behavioral signals and proposes targeted interventions.
+              - generic [ref=e331]: Qualified further rounds
+          - generic [ref=e332]:
+            - paragraph [ref=e334]: "2026"
+            - generic [ref=e340]:
+              - paragraph [ref=e341]: Ossome Hacks 3.0
+              - heading "SentinelClaw" [level=3] [ref=e342]
+              - paragraph [ref=e343]: AI trading guardrail agent with a YAML policy engine and ArmorClaw enforcement layer. Blocks trades that violate policy; demonstrated on a malicious earnings report scenario.
+              - generic [ref=e344]:
+                - paragraph [ref=e345]: "Team: Cyka"
+                - generic [ref=e346]: Participated
+          - generic [ref=e347]:
+            - paragraph [ref=e349]: "2025"
+            - generic [ref=e354]:
+              - paragraph [ref=e355]: Smart India Hackathon 2025
+              - heading "—" [level=3] [ref=e356]
+              - paragraph [ref=e357]: National-level government hackathon. Competed in the software edition.
+              - generic [ref=e359]: Participated
+      - generic [ref=e361]:
+        - generic [ref=e362]:
+          - paragraph [ref=e363]: WRITING
+          - heading "Thinking out loud." [level=2] [ref=e364]
+        - generic [ref=e365]:
+          - link "Building things that break" [ref=e367] [cursor=pointer]:
+            - /url: /writing/building-things-that-break
+            - generic [ref=e370]:
+              - paragraph [ref=e372]: Apr 10, 2026
+              - generic [ref=e373]:
+                - heading "Building things that break" [level=3] [ref=e374]
+                - paragraph [ref=e375]: Why shipping broken code is better than not shipping at all, and what I learned fixing Arch SRM at 2am.
+              - generic [ref=e376]: →
+          - link "Why I like local AI" [ref=e378] [cursor=pointer]:
+            - /url: /writing/why-i-like-local-ai
+            - generic [ref=e381]:
+              - paragraph [ref=e383]: Mar 22, 2026
+              - generic [ref=e384]:
+                - heading "Why I like local AI" [level=3] [ref=e385]
+                - paragraph [ref=e386]: VOCO runs Qwen3 on a laptop with no API keys. Here's why that matters more than you think.
+              - generic [ref=e387]: →
+          - link "What hackathons actually teach" [ref=e389] [cursor=pointer]:
+            - /url: /writing/what-hackathons-actually-teach
+            - generic [ref=e392]:
+              - paragraph [ref=e394]: Feb 14, 2026
+              - generic [ref=e395]:
+                - heading "What hackathons actually teach" [level=3] [ref=e396]
+                - paragraph [ref=e397]: It's not the tech. It's learning to cut scope fast and still ship something real.
+              - generic [ref=e398]: →
+      - generic [ref=e400]:
+        - generic [ref=e401]:
+          - paragraph [ref=e402]: CONTACT
+          - heading "Let's talk." [level=2] [ref=e403]
+        - generic [ref=e404]:
+          - link "ryanxastra@gmail.com" [ref=e407] [cursor=pointer]:
+            - /url: mailto:ryanxastra@gmail.com
+            - img [ref=e408]
+            - generic [ref=e411]: ryanxastra@gmail.com
+          - link "github.com/aryan-astra" [ref=e414] [cursor=pointer]:
+            - /url: https://github.com/aryan-astra
+            - generic [ref=e415]: github.com/aryan-astra
+            - img [ref=e416]
+          - link "Resume" [ref=e422] [cursor=pointer]:
+            - /url: /resume.pdf
+            - img [ref=e423]
+            - generic [ref=e427]: Resume
+        - paragraph [ref=e429]: // SRMIST, Chennai · India
+  - contentinfo [ref=e431]:
+    - generic [ref=e432]:
+      - paragraph [ref=e433]: © 2026 Aryan Shukla
+      - paragraph [ref=e434]: built with Next.js · Cloudflare
+  - button "Open Next.js Dev Tools" [ref=e440] [cursor=pointer]:
+    - img [ref=e441]
+  - alert [ref=e447]

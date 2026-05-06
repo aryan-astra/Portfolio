@@ -1,17 +1,25 @@
+"use client";
+
+import dynamic from "next/dynamic";
 import Hero from "@/components/sections/Hero";
-import Projects from "@/components/sections/Projects";
-import Skills from "@/components/sections/Skills";
-import Hackathons from "@/components/sections/Hackathons";
-import Contact from "@/components/sections/Contact";
+
+const FeaturedWork = dynamic(() => import("@/components/sections/FeaturedWork"));
+const Projects = dynamic(() => import("@/components/sections/Projects"));
+const Skills = dynamic(() => import("@/components/sections/Skills"));
+const Hackathons = dynamic(() => import("@/components/sections/Hackathons"));
+const Writing = dynamic(() => import("@/components/sections/Writing"));
+const Contact = dynamic(() => import("@/components/sections/Contact"));
 
 export default function Home() {
   return (
-    <>
+    <div className="relative z-10">
       <Hero />
+      <FeaturedWork />
       <Projects />
       <Skills />
       <Hackathons />
+      <Writing />
       <Contact />
-    </>
+    </div>
   );
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { DM_Sans, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
@@ -18,12 +19,12 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Aryan Shukla — Builder",
+  title: "Aryan Shukla — I build things people actually use",
   description:
-    "CSE student at SRMIST building things that get used. PWAs, Android apps, AI agents, and more.",
+    "CSE student at SRMIST. I build PWAs, Android apps, offline AI agents, and tools that get used daily.",
   openGraph: {
     title: "Aryan Shukla",
-    description: "Builder. CSE @ SRMIST.",
+    description: "Builder. CSE @ SRMIST. 300+ daily users on my projects.",
     url: "https://aryans.is-a.dev",
     siteName: "Aryan Shukla",
     type: "website",
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     title: "Aryan Shukla — Builder",
-    description: "CSE student at SRMIST. I build things.",
+    description: "CSE student at SRMIST. I build things that get used.",
   },
 };
 
@@ -47,16 +48,22 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <script
+        <Script
+          id="theme-script"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');}catch(e){}`,
           }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-background text-foreground antialiased">
+      <body className="min-h-screen flex flex-col bg-background text-foreground antialiased relative overflow-x-clip">
         <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <main className="flex-1 relative z-10" id="main-content">
+          {children}
+        </main>
+        <div className="relative z-10" id="contact">
+          <Footer />
+        </div>
       </body>
     </html>
   );

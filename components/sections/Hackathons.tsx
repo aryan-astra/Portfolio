@@ -2,86 +2,86 @@
 
 import { motion } from "framer-motion";
 import { hackathons } from "@/lib/data";
+import MagneticGlowCard from "@/components/MagneticGlowCard";
 
-const sectionVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
+const sorted = [...hackathons].sort((a, b) => b.year - a.year);
 
-export default function Hackathons() {
-  const sorted = [...hackathons].sort((a, b) => b.year - a.year);
+function TimelineNode({ entry, index }: { entry: (typeof hackathons)[0]; index: number }) {
+  const qualified = entry.result === "Qualified further rounds";
 
   return (
-    <section id="hackathons" className="py-24 md:py-32">
-      <div className="max-w-5xl mx-auto px-6">
+    <div className="flex gap-5">
+      {/* Left: year + line */}
+      <div className="flex flex-col items-center gap-0 shrink-0 w-12">
+        <p className="pt-1 font-mono text-[0.65rem] text-muted-foreground">{entry.year}</p>
+        {/* Dot */}
+        <div
+          className={`mt-2 w-2 h-2 rounded-full shrink-0 ${
+            qualified ? "bg-accent-blue" : "bg-border"
+          }`}
+          aria-hidden="true"
+        />
+        {/* Line (not shown on last item) */}
+        {index < sorted.length - 1 && (
+          <div className="flex-1 w-px bg-border mt-1" />
+        )}
+      </div>
+
+      {/* Right: content */}
+      <div className="pb-10 flex-1 min-w-0">
+        <MagneticGlowCard>
+          <div className="p-5">
+            <p className="mb-1 font-mono text-[0.65rem] uppercase tracking-wider text-muted-foreground">{entry.event}</p>
+            <h3 className="mb-1 max-w-[22ch] font-serif text-3xl leading-tight text-foreground">{entry.project}</h3>
+            <p className="mb-3 max-w-[50ch] text-[0.97rem] leading-relaxed text-muted-foreground">{entry.description}</p>
+
+            <div className="flex flex-wrap items-center gap-2 mt-4">
+              {entry.team && (
+                <p className="font-mono text-[0.65rem] text-muted-foreground">Team: {entry.team}</p>
+              )}
+              <span
+                className={`px-2 py-0.5 rounded-sm border ${
+                  qualified
+                    ? "border-accent-blue"
+                    : "border-border"
+                }`}
+              >
+                <span className={`font-mono text-[0.65rem] ${qualified ? "text-accent-blue" : "text-muted-foreground"}`}>
+                  {entry.result}
+                </span>
+              </span>
+            </div>
+          </div>
+        </MagneticGlowCard>
+      </div>
+    </div>
+  );
+}
+
+export default function Hackathons() {
+  return (
+    <section id="hackathons" className="section-block">
+      <div className="content-shell">
         <motion.div
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="mb-14"
+          className="mb-12"
         >
-          <h2 className="font-serif text-4xl md:text-5xl font-normal tracking-tight text-foreground mb-3">
-            Hackathons
+          <p className="mb-2 font-mono text-[0.68rem] tracking-[0.22em] text-muted-foreground">HACKATHONS</p>
+          <h2 className="max-w-[16ch] font-serif text-[clamp(2.05rem,4vw,3.2rem)] leading-[1.02] tracking-[-0.01em] text-foreground">
+            Built under pressure.
           </h2>
-          <p className="font-sans text-base text-muted-foreground leading-relaxed">
-            5 events. Learnt something at every one.
-          </p>
+          <div className="mt-3">
+            <p className="text-[0.97rem] text-muted-foreground">
+              {sorted.length} events. Learnt something at every one.
+            </p>
+          </div>
         </motion.div>
 
         <div className="flex flex-col">
-          {sorted.map((entry, index) => (
-            <motion.div
-              key={`${entry.event}-${index}`}
-              variants={sectionVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{
-                duration: 0.5,
-                ease: "easeOut",
-                delay: index * 0.08,
-              }}
-              className="flex flex-row items-stretch"
-            >
-              {/* Year */}
-              <div className="font-mono text-xs text-muted-foreground w-12 shrink-0 pt-1">
-                {entry.year}
-              </div>
-
-              {/* Vertical line */}
-              <div className="w-px bg-border self-stretch mx-4 shrink-0" />
-
-              {/* Content */}
-              <div className="flex-1 pb-10 last:pb-0">
-                <p className="font-sans text-sm font-semibold text-foreground mb-0.5">
-                  {entry.event}
-                </p>
-                <p className="font-serif text-lg text-foreground mb-2">
-                  {entry.project}
-                </p>
-                <p className="font-sans text-sm text-muted-foreground leading-relaxed mb-3">
-                  {entry.description}
-                </p>
-                <div className="flex flex-wrap items-center gap-3">
-                  {entry.team && (
-                    <span className="font-mono text-xs text-muted-foreground">
-                      Team: {entry.team}
-                    </span>
-                  )}
-                  {entry.result === "Qualified further rounds" ? (
-                    <span className="font-mono text-xs border border-border text-foreground px-2 py-0.5 rounded-sm">
-                      {entry.result}
-                    </span>
-                  ) : (
-                    <span className="font-mono text-xs text-muted-foreground">
-                      {entry.result}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </motion.div>
+          {sorted.map((entry, i) => (
+            <TimelineNode key={`${entry.event}-${i}`} entry={entry} index={i} />
           ))}
         </div>
       </div>
