@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { projects, posts } from "@/lib/data";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://aryans.is-a.dev";
 

@@ -21,9 +21,13 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Aryan Shukla — I build things people actually use",
+  metadataBase: new URL("https://aryans.is-a.dev"),
+  title: {
+    default: "Aryan Shukla",
+    template: "%s — Aryan Shukla",
+  },
   description:
-    "CSE student at SRMIST. I build PWAs, Android apps, offline AI agents, and tools that get used daily.",
+    "CSE student at SRMIST building tools, apps, and AI systems that get used daily.",
   openGraph: {
     title: "Aryan Shukla",
     description: "Builder. CSE @ SRMIST. 300+ daily users on my projects.",
@@ -32,8 +36,8 @@ export const metadata: Metadata = {
     type: "website",
   },
   twitter: {
-    card: "summary",
-    title: "Aryan Shukla — Builder",
+    card: "summary_large_image",
+    title: "Aryan Shukla",
     description: "CSE student at SRMIST. I build things that get used.",
   },
 };
@@ -65,7 +69,7 @@ export default function RootLayout({
         <main className="flex-1 relative z-10" id="main-content">
           {children}
         </main>
-        <div className="relative z-10" id="contact">
+        <div className="relative z-10" id="site-footer">
           <Footer />
         </div>
       </body>

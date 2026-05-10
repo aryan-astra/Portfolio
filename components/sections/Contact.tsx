@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight, Envelope } from "@phosphor-icons/react";
+import { Envelope, GithubLogo, LinkedinLogo, TwitterLogo } from "@phosphor-icons/react";
 import MagneticGlowCard from "@/components/MagneticGlowCard";
+import { contact } from "@/lib/data";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -31,11 +32,11 @@ export default function Contact() {
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5, ease: "easeOut", delay: 0.12 }}
-          className="flex flex-col sm:flex-row flex-wrap gap-4"
+          className="flex flex-col flex-wrap gap-4 sm:flex-row"
         >
           <MagneticGlowCard>
             <a
-              href="mailto:ryanxastra@gmail.com"
+              href={`mailto:${contact.email}`}
               id="contact-email"
               className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-sans transition-transform duration-200 hover:-translate-y-0.5"
             >
@@ -44,45 +45,61 @@ export default function Contact() {
                 aria-hidden="true"
                 className="shrink-0 text-muted-foreground transition-all duration-200 group-hover:text-accent-blue group-hover:rotate-[-8deg]"
               />
-              <span className="text-[0.97rem] text-muted-foreground group-hover:text-foreground transition-colors duration-200">
-                ryanxastra@gmail.com
+              <span className="text-[0.97rem] text-muted-foreground transition-colors duration-200 group-hover:text-foreground">
+                {contact.email}
               </span>
             </a>
           </MagneticGlowCard>
 
           <MagneticGlowCard>
             <a
-              href="https://github.com/aryan-astra"
+              href={contact.github}
               target="_blank"
               rel="noopener noreferrer"
               id="contact-github"
               className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-sans transition-transform duration-200 hover:-translate-y-0.5"
             >
-              <span className="text-[0.97rem] text-muted-foreground group-hover:text-foreground transition-colors duration-200">
+              <GithubLogo size={14} aria-hidden="true" className="shrink-0 text-muted-foreground transition-all duration-200 group-hover:text-accent-blue group-hover:-rotate-6" />
+              <span className="text-[0.97rem] text-muted-foreground transition-colors duration-200 group-hover:text-foreground">
                 github.com/aryan-astra
               </span>
-              <ArrowUpRight size={12} aria-hidden="true" className="shrink-0 text-muted-foreground transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
           </MagneticGlowCard>
 
           <MagneticGlowCard>
             <a
-              href="/resume.pdf"
+              href={contact.twitter}
               target="_blank"
               rel="noopener noreferrer"
-              id="contact-resume"
+              id="contact-twitter"
               className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-sans transition-transform duration-200 hover:-translate-y-0.5"
             >
-              <ArrowUpRight
-                size={14}
-                aria-hidden="true"
-                className="shrink-0 text-muted-foreground transition-all duration-200 group-hover:text-accent-blue group-hover:translate-y-[-1px]"
-              />
-              <span className="text-[0.97rem] text-muted-foreground group-hover:text-foreground transition-colors duration-200">
-                Resume
+              <TwitterLogo size={14} aria-hidden="true" className="shrink-0 text-muted-foreground transition-all duration-200 group-hover:text-accent-blue group-hover:-rotate-6" />
+              <span className="text-[0.97rem] text-muted-foreground transition-colors duration-200 group-hover:text-foreground">
+                x.com/aryanxastra
               </span>
             </a>
           </MagneticGlowCard>
+
+          <MagneticGlowCard>
+            <a
+              href={contact.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              id="contact-linkedin"
+              className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-sans transition-transform duration-200 hover:-translate-y-0.5"
+            >
+              <LinkedinLogo size={14} aria-hidden="true" className="shrink-0 text-muted-foreground transition-all duration-200 group-hover:text-accent-blue group-hover:-rotate-6" />
+              <span className="text-[0.97rem] text-muted-foreground transition-colors duration-200 group-hover:text-foreground">
+                linkedin.com/in/aryanworks
+              </span>
+            </a>
+          </MagneticGlowCard>
+
+          <div className="flex items-center gap-2 rounded-full border border-border/60 px-4 py-2 text-xs text-muted-foreground">
+            <span className="inline-flex h-2 w-2 rounded-full bg-accent-blue" aria-hidden="true" />
+            Resume available on request
+          </div>
         </motion.div>
 
         <motion.div

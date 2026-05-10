@@ -41,7 +41,7 @@ export default function FeaturedWork() {
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.1 }}
             >
-              <MagneticGlowCard className="h-full">
+              <MagneticGlowCard className="h-full group">
                 <article className="flex flex-col gap-4 p-6 h-full">
                   {/* Header */}
                   <div className="flex items-start justify-between gap-3">

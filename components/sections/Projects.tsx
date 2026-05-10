@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { projects, type Project } from "@/lib/data";
@@ -92,9 +93,10 @@ export default function Projects() {
   const featuredProjects = projects.filter((p) => p.featured);
   const mainProjects = projects.filter((p) => !p.featured && !p.secondary);
   const secondaryProjects = projects.filter((p) => p.secondary);
+  const [secondaryOpen, setSecondaryOpen] = useState(false);
 
   return (
-    <section id="featured" className="section-block">
+    <section id="projects" className="section-block">
       <div className="content-shell">
         {/* Section Header */}
         <motion.div
@@ -169,36 +171,47 @@ export default function Projects() {
         {/* SECONDARY: Compact list */}
         {secondaryProjects.length > 0 && (
           <div>
-            <motion.h3
-              initial={fadeUp.hidden}
-              whileInView="visible"
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="font-mono text-[0.75rem] tracking-[0.15em] text-muted-foreground mb-4 uppercase"
-            >
-              Other Projects
-            </motion.h3>
-            <motion.div
-              initial={fadeUp.hidden}
-              whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ delay: 0.1 }}
-              className="space-y-2 pl-4 border-l border-border"
-            >
-              {secondaryProjects.map((project) => (
-                <Link key={project.slug} href={`/projects/${project.slug}`} className="block group">
-                  <div className="flex items-start justify-between gap-4 py-2 -ml-4 pl-4 hover:bg-muted/30 transition-colors rounded-sm">
-                    <div className="flex-1">
-                      <h4 className="font-medium text-foreground group-hover:text-accent-blue transition-colors">
-                        {project.name}
-                      </h4>
-                      <p className="text-sm text-muted-foreground mt-0.5">{project.oneLiner}</p>
+            <div className="mb-4 flex items-center justify-between gap-4">
+              <motion.h3
+                initial={fadeUp.hidden}
+                whileInView="visible"
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="font-mono text-[0.75rem] tracking-[0.15em] text-muted-foreground uppercase"
+              >
+                Other Projects
+              </motion.h3>
+              <button
+                type="button"
+                onClick={() => setSecondaryOpen((value) => !value)}
+                className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {secondaryOpen ? "Collapse" : `Show ${secondaryProjects.length}`}
+              </button>
+            </div>
+            {secondaryOpen && (
+              <motion.div
+                initial={fadeUp.hidden}
+                whileInView="visible"
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ delay: 0.1 }}
+                className="space-y-2 pl-4 border-l border-border"
+              >
+                {secondaryProjects.map((project) => (
+                  <Link key={project.slug} href={`/projects/${project.slug}`} className="block group">
+                    <div className="flex items-start justify-between gap-4 py-2 -ml-4 pl-4 hover:bg-muted/30 transition-colors rounded-sm">
+                      <div className="flex-1">
+                        <h4 className="font-medium text-foreground group-hover:text-accent-blue transition-colors">
+                          {project.name}
+                        </h4>
+                        <p className="text-sm text-muted-foreground mt-0.5">{project.oneLiner}</p>
+                      </div>
+                      <span className="shrink-0 text-muted-foreground group-hover:text-accent-blue transition-colors">→</span>
                     </div>
-                    <span className="shrink-0 text-muted-foreground group-hover:text-accent-blue transition-colors">→</span>
-                  </div>
-                </Link>
-              ))}
-            </motion.div>
+                  </Link>
+                ))}
+              </motion.div>
+            )}
           </div>
         )}
       </div>
