@@ -9,29 +9,29 @@ import { contact } from "@/lib/data";
    CHARACTER — 12 lines, deletion goes bottom→top (line 11 first)
 ══════════════════════════════════════════════════════════════════ */
 const CHAR_LINES = [
-  "        .──────────.        ",
-  "       / ◉        ◉ \\       ",
-  "      |   ────────   |      ",
-  "      |  ╰────────╯  |      ",
-  "       \\              /     ",
-  "        '──────────'        ",
-  "              ||            ",
-  "   ═══════════╬╬═══════════  ", // arm line — index 7 (animated)
-  "              ||            ",
-  "            /    \\          ",
-  "           /      \\         ",
-  "          /        \\        ",
+  "          ╭──────────╮          ",  // 0 head top
+  "         │  ◕      ◕  │         ",  // 1 eyes
+  "         │      ·      │         ",  // 2 nose
+  "         │  ╰──────╯  │         ",  // 3 smile
+  "          ╰──────────╯          ",  // 4 head bottom
+  "               ║║               ",  // 5 neck
+  "               ║║               ",  // 6 torso
+  "   ═══════════╬╬═══════════     ",  // 7 ARMS (animated)
+  "               ║║               ",  // 8 lower torso
+  "             ╱    ╲             ",  // 9 legs top
+  "            ╱      ╲            ",  // 10
+  "           ╱        ╲           ",  // 11
 ];
 
 // Arm wave frames (swapped into CHAR_LINES[7] during ascii phase)
 const ARM_FRAMES = [
-  "   ═══════════╬╬═══════════  ", // 0 neutral
-  "   ════════════╬╬═════════╲  ", // 1 right arm tilts
-  "   ════════════╬╬══════════╲ ", // 2 higher
-  "   ════════════╬╬═══════════╲", // 3 top
-  "   ════════════╬╬══════════○ ", // 4 hand visible (○ = waving hand)
-  "   ════════════╬╬═════════╲  ", // 5 coming back
-  "   ═══════════╬╬═══════════  ", // 6 neutral
+  "   ═══════════╬╬═══════════     ",  // 0 neutral
+  "   ════════════╬╬═════════╲     ",  // 1 right arm tilts
+  "   ════════════╬╬══════════╲    ",  // 2 higher
+  "   ════════════╬╬═══════════╲   ",  // 3 top
+  "   ════════════╬╬════════════○  ",  // 4 hand visible
+  "   ════════════╬╬═════════╲     ",  // 5 coming back
+  "   ═══════════╬╬═══════════     ",  // 6 neutral
 ];
 
 /* ══════════════════════════════════════════════════════════════════
@@ -69,19 +69,19 @@ const FLOWER_CONFIG = [
 type Phase = "ascii" | "typing" | "eye";
 
 /* ══════════════════════════════════════════════════════════════════
-   DOT-MATRIX EYE — canvas RAF loop, pupil lerps toward mouse
+   HALFTONE DOT-MATRIX EYES
+   Two eyes on one canvas — dot SIZE encodes brightness (halftone).
+   White dots on dark bg: large=bright (sclera), tiny=dark (pupil).
+   Both pupils share one lerped offset that tracks the cursor.
 ══════════════════════════════════════════════════════════════════ */
 function DotEye({ mouseX, mouseY }: { mouseX: number; mouseY: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef    = useRef<number | null>(null);
-  const pupil     = useRef({ x: 0, y: 0 });   // current (lerped)
-  const target    = useRef({ x: 0, y: 0 });   // target from mouse
+  const pupilOff  = useRef({ x: 0, y: 0 });  // shared lerped offset
   const mouse     = useRef({ x: mouseX, y: mouseY });
 
   // Keep mouse ref in sync without restarting the RAF loop
-  useEffect(() => {
-    mouse.current = { x: mouseX, y: mouseY };
-  }, [mouseX, mouseY]);
+  useEffect(() => { mouse.current = { x: mouseX, y: mouseY }; }, [mouseX, mouseY]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -89,94 +89,116 @@ function DotEye({ mouseX, mouseY }: { mouseX: number; mouseY: number }) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const W = canvas.width;   // 400
-    const H = canvas.height;  // 210
-    const GAP  = 11;           // dot spacing
-    const DR   = 3.8;          // base dot radius
-    const CX   = W / 2;
-    const CY   = H / 2;
-    const A    = 175;          // eye horizontal semi-axis
-    const B    = 82;           // eye vertical semi-axis
-    const IRIS = 70;           // iris radius
-    const PUP  = 34;           // pupil radius
-    const MAX  = 26;           // max pupil travel distance
+    const W = 420, H = 188;
+    const GAP   = 8;         // grid spacing
+    const MAX_R = 3.7;       // max dot radius (fully bright sclera)
+    const MAX_P = 14;        // max pupil travel (pixels)
 
-    const inEye = (x: number, y: number) => {
-      const dx = x - CX, dy = y - CY;
-      return (dx * dx) / (A * A) + (dy * dy) / (B * B) <= 1;
-    };
+    // Eye descriptors: cx/cy=center, ew=half-width, et=top semi-h, eb=bot semi-h,
+    //                  ir=iris radius, pr=pupil radius
+    const EYES = [
+      { cx: 125, cy: 94,  ew: 96,  et: 39, eb: 30, ir: 42, pr: 18 },  // left
+      { cx: 295, cy: 97,  ew: 88,  et: 35, eb: 27, ir: 38, pr: 16 },  // right (slightly smaller)
+    ];
+
+    /**
+     * Returns brightness 0–1 at grid point (x,y) for one eye.
+     * 1 = fully bright  → large white dot
+     * 0 = fully dark    → no/tiny dot (dark bg shows = looks black)
+     * -1 = outside eye  → skip
+     */
+    function getBrightness(
+      x: number, y: number,
+      cx: number, cy: number,
+      ew: number, et: number, eb: number,
+      ir: number, pr: number,
+      px: number, py: number,
+    ): number {
+      const dx = x - cx, dy = y - cy;
+      const vy   = dy < 0 ? et : eb;
+      const eVal = (dx * dx) / (ew * ew) + (dy * dy) / (vy * vy);
+      if (eVal > 1) return -1;
+
+      // Distances
+      const id  = Math.sqrt(dx * dx + dy * dy);          // from iris center
+      const ppx = x - (cx + px), ppy = y - (cy + py);
+      const pd  = Math.sqrt(ppx * ppx + ppy * ppy);      // from pupil center
+
+      // ── PUPIL (near-black) ──
+      if (pd < pr) return 0.03 + (pd / pr) * 0.09;
+
+      // ── IRIS ──
+      if (id < ir) {
+        const t      = id / ir;                             // 0=center, 1=edge
+        const limbal = t > 0.76 ? Math.pow((t - 0.76) / 0.24, 2) * 0.40 : 0; // limbal ring
+        const ang    = Math.atan2(dy, dx);
+        const fiber  = Math.sin(ang * 8) * 0.05;            // radial texture
+        return Math.max(0.05, 0.44 - t * 0.08 + fiber - limbal);
+      }
+
+      // ── SCLERA ──
+      const t = (id - ir) / (ew - ir);  // 0=iris edge → 1=eye edge
+      let b = 0.90 - t * 0.33;
+
+      // Top eyelid shadow (lashes/lid make top very dark)
+      const sq       = Math.sqrt(Math.max(0, 1 - (dx / ew) ** 2));
+      const topEdgeY = cy - et * sq;
+      const fromTop  = (y - topEdgeY) / (et * 0.48);
+      if (fromTop < 1) b -= (1 - Math.max(0, fromTop)) * 0.75;
+
+      // Bottom eyelid subtle shadow
+      const botEdgeY = cy + eb * sq;
+      const fromBot  = (botEdgeY - y) / (eb * 0.26);
+      if (fromBot < 1) b -= (1 - Math.max(0, fromBot)) * 0.28;
+
+      // Edge vignette
+      b -= Math.pow(eVal, 2.5) * 0.16;
+
+      return Math.max(0.03, b);
+    }
 
     const frame = () => {
-      // Recompute target from current mouse ref
+      // Update shared pupil offset from live mouse ref
       const rect = canvas.getBoundingClientRect();
-      const mx = mouse.current.x - (rect.left + rect.width  / 2);
-      const my = mouse.current.y - (rect.top  + rect.height / 2);
-      const ang = Math.atan2(my, mx);
-      const d   = Math.min(Math.sqrt(mx * mx + my * my) * 0.1, MAX);
-      target.current = { x: Math.cos(ang) * d, y: Math.sin(ang) * d };
-
-      // Smooth lerp current → target
-      pupil.current.x += (target.current.x - pupil.current.x) * 0.1;
-      pupil.current.y += (target.current.y - pupil.current.y) * 0.1;
-      const { x: px, y: py } = pupil.current;
+      const mx   = mouse.current.x - rect.left - rect.width  / 2;
+      const my   = mouse.current.y - rect.top  - rect.height / 2;
+      const d    = Math.min(Math.sqrt(mx * mx + my * my) * 0.06, MAX_P);
+      const ang  = Math.atan2(my, mx);
+      const tx   = Math.cos(ang) * d, ty = Math.sin(ang) * d;
+      pupilOff.current.x += (tx - pupilOff.current.x) * 0.08;
+      pupilOff.current.y += (ty - pupilOff.current.y) * 0.08;
 
       ctx.clearRect(0, 0, W, H);
+      const { x: px, y: py } = pupilOff.current;
 
-      for (let gx = GAP / 2; gx < W; gx += GAP) {
-        for (let gy = GAP / 2; gy < H; gy += GAP) {
-          if (!inEye(gx, gy)) continue;
-
-          const dx  = gx - CX, dy = gy - CY;
-          const dc  = Math.sqrt(dx * dx + dy * dy);           // dist from center
-          const dpx = gx - (CX + px), dpy = gy - (CY + py);
-          const dp  = Math.sqrt(dpx * dpx + dpy * dpy);       // dist from pupil
-          const ang2 = Math.atan2(dy, dx);
-
-          let r = DR, color: string;
-
-          if (dp < PUP) {
-            // ── PUPIL ──
-            const t = dp / PUP;
-            const v = Math.round(t * 22);
-            color = `rgb(${v + 2},${v + 2},${v + 7})`;
-            r = DR * (0.75 + t * 0.3);
-          } else if (dc < IRIS) {
-            // ── IRIS — with radial fiber texture ──
-            const t = dc / IRIS;                              // 0=center, 1=edge
-            const fiber = (Math.sin(ang2 * 8) + 1) / 2;     // 8 radial rays
-            const rr = Math.round(16 + t * 32 + fiber * 14);
-            const gg = Math.round(42 + t * 58 + fiber * 10);
-            const bb = Math.round(175 + t * 60);
-            color = `rgb(${rr},${gg},${bb})`;
-            r = DR * (0.88 + t * 0.18);
-          } else {
-            // ── SCLERA ──
-            const t = (dc - IRIS) / (A - IRIS);
-            const v = Math.round(196 - t * 46);
-            color = `rgb(${v + 10},${v + 6},${v})`;
-            r = DR * (0.72 - t * 0.12);
+      // Staggered (hexagonal-ish) dot grid
+      let row = 0;
+      for (let gy = GAP * 0.5; gy < H; gy += GAP, row++) {
+        const xOff = (row & 1) ? GAP * 0.5 : 0;
+        for (let gx = GAP * 0.5 + xOff; gx < W; gx += GAP) {
+          let b = -1;
+          for (const e of EYES) {
+            const val = getBrightness(gx, gy, e.cx, e.cy, e.ew, e.et, e.eb, e.ir, e.pr, px, py);
+            if (val >= 0) { b = val; break; }
           }
+          if (b < 0) continue;
 
+          const r = Math.max(0.3, b * MAX_R);
           ctx.beginPath();
-          ctx.arc(gx, gy, Math.max(r, 0.8), 0, Math.PI * 2);
-          ctx.fillStyle = color;
+          ctx.arc(gx, gy, r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(212,208,200,${0.55 + b * 0.45})`;
           ctx.fill();
         }
       }
 
-      // Catchlight 1 (bright white)
-      const cl1x = CX + px + 20, cl1y = CY + py - 18;
-      if (inEye(cl1x, cl1y)) {
+      // Catchlights (bright white specular highlights in each iris)
+      for (const e of EYES) {
         ctx.beginPath();
-        ctx.arc(cl1x, cl1y, DR * 1.8, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255,255,255,0.94)";
+        ctx.arc(e.cx + px + 12, e.cy + py - 11, 2.1, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255,255,255,0.90)";
         ctx.fill();
-      }
-      // Catchlight 2 (dim)
-      const cl2x = CX + px - 11, cl2y = CY + py + 10;
-      if (inEye(cl2x, cl2y)) {
         ctx.beginPath();
-        ctx.arc(cl2x, cl2y, DR * 0.9, 0, Math.PI * 2);
+        ctx.arc(e.cx + px - 7, e.cy + py + 7, 1.0, 0, Math.PI * 2);
         ctx.fillStyle = "rgba(255,255,255,0.38)";
         ctx.fill();
       }
@@ -186,16 +208,16 @@ function DotEye({ mouseX, mouseY }: { mouseX: number; mouseY: number }) {
 
     rafRef.current = requestAnimationFrame(frame);
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, []); // Stable — uses refs for live mouse/pupil data
+  }, []); // Stable — all live data accessed via refs
 
   return (
     <canvas
       ref={canvasRef}
-      width={400}
-      height={210}
-      style={{ width: "100%", maxWidth: 400, height: "auto" }}
+      width={420}
+      height={188}
+      style={{ width: "100%", maxWidth: 440, height: "auto" }}
       className="select-none"
-      aria-label="Dot-matrix eye that follows your cursor"
+      aria-label="Halftone dot-matrix eyes that follow your cursor"
     />
   );
 }
