@@ -2,6 +2,17 @@
 
 import { useEffect, useRef } from "react";
 
+type Particle = {
+  id: number;
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  life: number;
+  age: number;
+  size: number;
+};
+
 export default function ButterflyBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -14,41 +25,14 @@ export default function ButterflyBackground() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    type Cell = {
-      x: number;
-      y: number;
-      energy: number;
-      rotation: number;
-      targetRotation: number;
-      pulse: number;
-      seed: number;
-    };
-
-    const cells: Cell[] = [];
+    const particles: Particle[] = [];
     const pointer = { x: -999, y: -999, prevX: -999, prevY: -999 };
-    const gridStep = 42;
-    const influenceRadius = 128;
     let rafId = 0;
+    let particleId = 0;
+    const MAX_PARTICLES = 28;
 
     const highlight = () => getComputedStyle(document.documentElement).getPropertyValue("--highlight").trim() || "#2563EB";
     const foreground = () => getComputedStyle(document.documentElement).getPropertyValue("--foreground").trim() || "#1A1816";
-
-    const buildGrid = () => {
-      cells.length = 0;
-      for (let y = gridStep * 0.5; y < window.innerHeight + gridStep; y += gridStep) {
-        for (let x = gridStep * 0.5; x < window.innerWidth + gridStep; x += gridStep) {
-          cells.push({
-            x,
-            y,
-            energy: 0,
-            rotation: 0,
-            targetRotation: 0,
-            pulse: Math.random() * Math.PI * 2,
-            seed: Math.random(),
-          });
-        }
-      }
-    };
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
@@ -57,7 +41,6 @@ export default function ButterflyBackground() {
       canvas.style.width = `${window.innerWidth}px`;
       canvas.style.height = `${window.innerHeight}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      buildGrid();
     };
 
     const onMouseMove = (e: MouseEvent) => {
@@ -70,104 +53,72 @@ export default function ButterflyBackground() {
       const dy = pointer.y - pointer.prevY;
       const speed = Math.sqrt(dx * dx + dy * dy);
 
-      for (const cell of cells) {
-        const distX = cell.x - pointer.x;
-        const distY = cell.y - pointer.y;
-        const distance = Math.sqrt(distX * distX + distY * distY);
-        if (distance > influenceRadius) continue;
+      const createParticle = (offsetX = 0, offsetY = 0, scale = 1) => {
+        particles.push({
+          id: particleId++,
+          x: pointer.x + offsetX,
+          y: pointer.y + offsetY,
+          vx: dx * 0.02 * scale + (Math.random() - 0.5) * 0.18,
+          vy: dy * 0.02 * scale + (Math.random() - 0.5) * 0.18,
+          life: 1,
+          age: 0,
+          size: 1.8 + Math.min(4.4, speed * 0.04) * scale,
+        });
+      };
 
-        const proximity = 1 - distance / influenceRadius;
-        cell.energy = Math.min(1, cell.energy + proximity * 0.55 + speed * 0.004);
-        cell.targetRotation = Math.atan2(dy || 0.001, dx || 0.001) * 0.25;
-        cell.pulse = 0;
+      createParticle();
+
+      if (speed > 10) {
+        createParticle(-dx * 0.08, -dy * 0.08, 0.82);
+      }
+
+      while (particles.length > MAX_PARTICLES) {
+        particles.shift();
       }
     };
 
     const draw = () => {
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      ctx.globalCompositeOperation = "source-over";
 
       const fg = foreground();
       const hl = highlight();
 
-      // Subtle grid skeleton so the field always feels structured.
-      ctx.save();
-      ctx.globalAlpha = 0.18;
-      ctx.strokeStyle = fg;
-      ctx.lineWidth = 1;
-      for (let x = 0; x < window.innerWidth; x += gridStep) {
-        ctx.beginPath();
-        ctx.moveTo(x + 0.5, 0);
-        ctx.lineTo(x + 0.5, window.innerHeight);
-        ctx.stroke();
-      }
-      for (let y = 0; y < window.innerHeight; y += gridStep) {
-        ctx.beginPath();
-        ctx.moveTo(0, y + 0.5);
-        ctx.lineTo(window.innerWidth, y + 0.5);
-        ctx.stroke();
-      }
-      ctx.restore();
-
       ctx.globalCompositeOperation = "lighter";
 
-      for (const cell of cells) {
-        cell.energy *= 0.92;
-        cell.rotation += (cell.targetRotation - cell.rotation) * 0.11;
-        cell.targetRotation *= 0.92;
-        cell.pulse += 0.04;
+      particles.forEach((particle, index) => {
+        particle.age += 1;
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        particle.vx *= 0.965;
+        particle.vy *= 0.965;
+        particle.life *= 0.965;
 
-        const energy = Math.max(0, cell.energy);
-        const size = 12 + energy * 14;
-        const inner = size * 0.36;
-        const petalSize = inner * 0.72 + Math.sin(cell.pulse + cell.seed * 10) * 0.8;
-        const alpha = 0.08 + energy * 0.86;
+        const fade = Math.max(0, particle.life);
+        const isHead = index === particles.length - 1;
+        const radius = particle.size + index * 0.08;
+        const alpha = isHead ? 0.95 * fade : 0.22 * fade;
 
         ctx.save();
-        ctx.translate(cell.x, cell.y);
-        ctx.rotate(cell.rotation);
         ctx.globalAlpha = alpha;
         ctx.shadowColor = hl;
-        ctx.shadowBlur = 8 + energy * 18;
+        ctx.shadowBlur = isHead ? 18 : 8;
+        ctx.fillStyle = isHead ? hl : fg;
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, isHead ? radius * 1.2 : radius, 0, Math.PI * 2);
+        ctx.fill();
 
-        // Outer square frame.
-        ctx.strokeStyle = energy > 0.2 ? hl : fg;
-        ctx.lineWidth = 1.1;
-        ctx.strokeRect(-size * 0.52, -size * 0.52, size * 1.04, size * 1.04);
-
-        // Four petals that feel like a tiny flower opening/closing.
-        ctx.fillStyle = energy > 0.55 ? hl : fg;
-        const offsets = [
-          [0, -petalSize - 2],
-          [petalSize + 2, 0],
-          [0, petalSize + 2],
-          [-petalSize - 2, 0],
-        ];
-
-        for (const [ox, oy] of offsets) {
+        if (isHead) {
+          ctx.globalAlpha = 0.45 * fade;
           ctx.beginPath();
-          ctx.roundRect(ox - 2.5, oy - 2.5, 5, 5, 1.5);
+          ctx.arc(particle.x, particle.y, radius * 2.1, 0, Math.PI * 2);
           ctx.fill();
         }
 
-        // Center bloom.
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = hl;
-        ctx.beginPath();
-        ctx.arc(0, 0, Math.max(1.6, inner * 0.55), 0, Math.PI * 2);
-        ctx.fill();
-
-        // Tiny inner brackets give the impression of flip/hinge motion.
-        ctx.strokeStyle = fg;
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(-inner, -inner * 0.15);
-        ctx.lineTo(-inner * 0.35, -inner * 0.15);
-        ctx.moveTo(inner * 0.35, -inner * 0.15);
-        ctx.lineTo(inner, -inner * 0.15);
-        ctx.stroke();
-
         ctx.restore();
+      });
+
+      while (particles.length > 0 && particles[0].life < 0.06) {
+        particles.shift();
       }
 
       rafId = requestAnimationFrame(draw);
@@ -190,7 +141,7 @@ export default function ButterflyBackground() {
       ref={canvasRef}
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 z-[100]"
-      style={{ mixBlendMode: "multiply" }}
+      style={{ mixBlendMode: "screen" }}
     />
   );
 }

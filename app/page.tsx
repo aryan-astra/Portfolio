@@ -7,7 +7,6 @@ const FeaturedWork = dynamic(() => import("@/components/sections/FeaturedWork"))
 const Projects = dynamic(() => import("@/components/sections/Projects"));
 const Skills = dynamic(() => import("@/components/sections/Skills"));
 const Hackathons = dynamic(() => import("@/components/sections/Hackathons"));
-const Writing = dynamic(() => import("@/components/sections/Writing"));
 const Contact = dynamic(() => import("@/components/sections/Contact"));
 
 export default function Home() {
@@ -18,7 +17,6 @@ export default function Home() {
       <Projects />
       <Skills />
       <Hackathons />
-      <Writing />
       <Contact />
     </div>
   );

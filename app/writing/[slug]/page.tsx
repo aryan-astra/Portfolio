@@ -48,7 +48,7 @@ export default async function WritingPostPage({ params }: WritingPageProps) {
       <div className="content-shell">
         <div className="max-w-3xl">
         <Link
-          href="/#writing"
+          href="/writing"
           className="font-mono text-xs text-muted-foreground hover:text-accent-blue transition-colors"
         >
           ← Back to writing
