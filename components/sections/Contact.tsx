@@ -37,12 +37,12 @@ export default function Contact() {
             <a
               href="mailto:ryanxastra@gmail.com"
               id="contact-email"
-              className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-sans"
+              className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-sans transition-transform duration-200 hover:-translate-y-0.5"
             >
               <Envelope
                 size={14}
                 aria-hidden="true"
-                className="shrink-0 text-muted-foreground group-hover:text-accent-blue transition-colors"
+                className="shrink-0 text-muted-foreground transition-all duration-200 group-hover:text-accent-blue group-hover:rotate-[-8deg]"
               />
               <span className="text-[0.97rem] text-muted-foreground group-hover:text-foreground transition-colors duration-200">
                 ryanxastra@gmail.com
@@ -56,12 +56,12 @@ export default function Contact() {
               target="_blank"
               rel="noopener noreferrer"
               id="contact-github"
-              className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-sans"
+              className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-sans transition-transform duration-200 hover:-translate-y-0.5"
             >
               <span className="text-[0.97rem] text-muted-foreground group-hover:text-foreground transition-colors duration-200">
                 github.com/aryan-astra
               </span>
-              <ArrowUpRight size={12} aria-hidden="true" className="shrink-0 text-muted-foreground" />
+              <ArrowUpRight size={12} aria-hidden="true" className="shrink-0 text-muted-foreground transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
           </MagneticGlowCard>
 
@@ -71,12 +71,12 @@ export default function Contact() {
               target="_blank"
               rel="noopener noreferrer"
               id="contact-resume"
-              className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-sans"
+              className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-sans transition-transform duration-200 hover:-translate-y-0.5"
             >
               <ArrowUpRight
                 size={14}
                 aria-hidden="true"
-                className="shrink-0 text-muted-foreground group-hover:text-accent-blue transition-colors"
+                className="shrink-0 text-muted-foreground transition-all duration-200 group-hover:text-accent-blue group-hover:translate-y-[-1px]"
               />
               <span className="text-[0.97rem] text-muted-foreground group-hover:text-foreground transition-colors duration-200">
                 Resume

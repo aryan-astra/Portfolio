@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -78,12 +79,20 @@ export default function Navbar() {
               <a
                 key={link.href}
                 href={link.href}
-                className="transition-colors duration-200"
+                className="relative transition-colors duration-200"
                 aria-current={isActive ? "location" : undefined}
               >
                 <span className={isActive ? "text-[0.95rem] text-accent-blue" : "text-[0.95rem] text-muted-foreground hover:text-foreground"}>
                   {link.label}
                 </span>
+                <motion.span
+                  layoutId="nav-active"
+                  className="absolute -bottom-1 left-0 h-px w-full bg-accent-blue"
+                  initial={false}
+                  animate={{ scaleX: isActive ? 1 : 0 }}
+                  transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+                  style={{ transformOrigin: "left" }}
+                />
               </a>
             );
           })}
@@ -107,9 +116,16 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile menu */}
-      {mobileOpen && (
-        <div className="md:hidden bg-background/92 backdrop-blur-md">
-          <div className="content-shell py-4 flex flex-col gap-4">
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+            className="md:hidden bg-background/92 backdrop-blur-md"
+          >
+            <div className="content-shell py-4 flex flex-col gap-4">
             {navLinks.map((link) => {
               const sectionId = link.href.replace("#", "");
               const isActive = activeSection === sectionId;
@@ -126,9 +142,10 @@ export default function Navbar() {
                 </a>
               );
             })}
-          </div>
-        </div>
-      )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

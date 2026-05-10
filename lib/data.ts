@@ -36,15 +36,18 @@ export type Post = {
   body: string[];
 };
 
-export const heroSubtext = "I'm Aryan — a CS sophomore at SRMIST building things people actually open. Sometimes they work. Sometimes they break. Both are useful.";
+export const heroSubtext = `I'm Aryan — a CS sophomore at SRMIST building things people actually open.
+Sometimes they work. Sometimes they break. Both are useful.`;
 
 export const contact = {
+  email: "ryanxastra@gmail.com",
+  github: "https://github.com/aryan-astra",
   twitter: "https://x.com/aryanxastra",
   linkedin: "https://linkedin.com/in/aryanworks",
 };
 
 export const projects: Project[] = [
-  // FEATURED
+  // ─── FEATURED (featured: true) ──────────────────────────────────────────────
   {
     slug: "arch-srm",
     name: "Arch SRM",
@@ -99,7 +102,7 @@ export const projects: Project[] = [
     },
   },
 
-  // MAIN PROJECTS
+    // ─── MAIN PROJECTS (featured: false, shown in primary grid) ─────────────────
   {
     slug: "maxq",
     name: "MaxQ",
@@ -151,7 +154,6 @@ export const projects: Project[] = [
         "v1.1.0 publicly shipped. Turned a repetitive multi-attempt task into a single-pass workflow.",
     },
   },
-
   {
     slug: "modus",
     name: "Modus",
@@ -178,7 +180,6 @@ export const projects: Project[] = [
         "v3.5.2 publicly shipped. Companion website live at themodus.netlify.app.",
     },
   },
-
   {
     slug: "ratify",
     name: "Ratify",
@@ -205,7 +206,7 @@ export const projects: Project[] = [
     },
   },
 
-  // SECONDARY PROJECTS
+    // ─── SECONDARY PROJECTS (shown in compact list, not full cards) ──────────────
   {
     slug: "img-market",
     name: "img-market",
@@ -273,6 +274,22 @@ export const hackathons: Hackathon[] = [
     result: "Participated",
     year: 2025,
   },
+  {
+    event: "HeisenHack 2025",
+    project: "Revenue Share",
+    description:
+      "A revenue-sharing prototype built under time pressure for an ACM SIGKDD hackathon track, scoped down hard to avoid spending the whole event on dashboard glitter.",
+    result: "Participated",
+    year: 2025,
+  },
+  {
+    event: "DayZero CodeNex 2025",
+    project: "Virtual Try-On",
+    description:
+      "A WebGL-based virtual try-on concept built to make the demo feel alive without pretending the problem was fully solved in 36 hours.",
+    result: "Participated",
+    year: 2025,
+  },
 ];
 
 export const posts: Post[] = [
@@ -283,14 +300,14 @@ export const posts: Post[] = [
       "Why shipping broken code is better than not shipping at all, and what I learned fixing Arch SRM at 2am.",
     date: "2026-04-10",
     body: [
-      "I used to treat shipping as the end of a project, a neat ribbon tied around finished work. Over time I learned shipping is the opening of a conversation with users. Once real people use your product, they reveal failure modes you could never predict in a local development environment.",
-      "The first time Arch SRM broke in production was a humbling lesson: a third-party session cookie rotated unexpectedly and half the campus lost access. The outage forced me to prioritise recovery ergonomics over feature creep.",
-      "Recovery ergonomics means clear messaging, fast rollback, and reproducible postmortems. We rebuilt our deploy playbook so a single command could revert the Workers proxy and trigger a status page update.",
-      "Short repair cycles beat long polish. When you aim for perfection before shipping, you delay feedback. When you aim for safe shipping with quick rollbacks, you get feedback sooner and can iterate toward real reliability.",
-      "Engineering for failure also means designing for observability. We added structured logs, trace IDs, and a small on-call checklist so the on-call person didn't have to guess where to start at 2am.",
-      "People conflate 'broken' with 'bad'. Broken software is only bad when it's hard to fix. My goal shifted to making fixes fast and low-risk instead of preventing every conceivable bug before the first user sees the product.",
-      "The cultural change was the hardest part: convincing stakeholders that it's OK to ship early as long as the team can recover quickly. The payoff was measurable: faster iterations, more honest user feedback, and ultimately a more resilient product.",
-      "If you build things people actually open, expect them to break. Make the breaking useful: instrument it, learn from it, and make the next release meaningfully better.",
+      "At 2:07am Zoho's signin.js hash changed from 6ab006 to 2bdb9d and Arch SRM's auth broke for every user at once. That's the kind of alert that teaches you what ownership actually feels like before you've had coffee.",
+      "By 2:14am my phone was doing that thing where it keeps lighting up with the same message from different people. Students couldn't check attendance, and the timing was perfect in the worst possible way because exams were close enough to make every missing percentage feel expensive.",
+      "I opened the logs, confirmed the hash diff, and stopped pretending this was a cute little bug. It was a production dependency changing underneath me, which is a polite way of saying somebody else's code decided to ruin my sleep schedule.",
+      "The hotfix was boring in the best possible way: reproduce locally, confirm the new hash, patch the auth flow, and make sure the fallback didn't turn into a second failure. Nothing glamorous, just a very calm sequence of steps at a very uncalm hour.",
+      "At 3am I deployed to Cloudflare Pages and watched the build land like it had somewhere better to be. There is a specific kind of relief when the page comes back and the messages stop piling up. It's not joy. It's a temporary ceasefire.",
+      "The part people skip in the success story is the social fallout. If students can't open the portal, they do not care that the incident was technically interesting. They care that their attendance percentage is now a personal threat.",
+      "That night clarified the difference between shipping a repo and shipping a product. A repo exists when you remember it. A product exists when other people rely on it, and that means failures stop being abstract immediately.",
+      "If you want real users, you also get real responsibility. You own the bug, the rollback, the message thread, the embarrassment, and the fix. That is the deal. Accountability is the difference between a GitHub project and something 300 students actually open.",
     ],
   },
   {
@@ -300,14 +317,14 @@ export const posts: Post[] = [
       "VOCO runs Qwen3 on a laptop with no API keys. Here's why that matters more than you think.",
     date: "2026-03-22",
     body: [
-      "Local AI changes the tradeoffs we usually accept. Instead of relying on a cloud endpoint where latency, privacy, and cost are uncertain, you get predictability: a model on disk that responds in a fixed time and whose behavior you control.",
-      "For automation workflows, that predictability matters more than peak model accuracy. If a background job will trigger a sequence of actions, you prefer consistent behavior over occasional brilliance followed by downtime.",
-      "Running locally also simplifies privacy and compliance. There are contexts where data can never leave the device. Local models remove the need for elaborate anonymisation workflows and reduce blast radius.",
-      "The tradeoff is obvious: you generally work with a smaller or older model. But engineering is about choosing the right tool for the job. For many automation tasks, locally-run mid-sized models are entirely sufficient.",
-      "Another practical benefit is cost. Cloud inference costs scale with traffic, which can make a useful product economically infeasible. A one-time hardware investment and careful caching can be far cheaper at scale.",
-      "Finally, local-first design forces better interfaces. If the model is on-device, latency is lower and you can create tighter UX loops. That changes how you structure prompts, retries, and fallbacks.",
-      "VOCO's router architecture (fast TF-IDF classifier, then LLM only when needed) is a practical takeaway: choose a hybrid stack where lightweight components handle the routine, and the heavy model is reserved for ambiguity.",
-      "Local AI is not a silver bullet, but it provides control. For me, that control is the feature.",
+      "VOCO started from a simple annoyance: every assistant I tried assumed a cloud connection, a paid API key, and an obedient internet connection. I wanted something that still worked when all of those assumptions died.",
+      "The first time I watched Qwen3:4b run a Playwright automation task on a laptop with no internet, it felt less like a demo and more like a small engineering victory. The machine was fully offline, the browser still moved, and nobody had to ask permission from a vendor.",
+      "That experience changed the shape of the project. Offline-first is not just about privacy. It also makes you stop treating the model as a magic oracle and start treating it like one component in a system that should be measured, routed, and sometimes ignored.",
+      "The ML router in VOCO exists because an LLM should not be the first thing touching every command. TF-IDF plus a Random Forest gets the obvious cases out of the way. The model only wakes up when there is actually something ambiguous to do.",
+      "That distinction matters because open-loop planners are fragile in the real world. They sound impressive right up until the browser changes, a modal appears, or a button moves six pixels and the whole plan falls apart. Closed-loop execution is uglier, but ugliness is often what makes it survive contact with reality.",
+      "There is also the unromantic benefit of not needing an API key. No rate limits. No surprise bills. No silent quota ceiling deciding whether your week goes smoothly. Reproducibility becomes your problem again, which is annoying, but also honest.",
+      "Privacy is not the only reason I like local AI, but it is the easiest one to explain. Data stays on the device, the inference stack is yours, and the whole thing feels less like borrowing a service and more like owning a machine.",
+      "The bigger shift is psychological. Once you own the model runtime, you stop asking whether the cloud allows a task and start asking whether your own system is disciplined enough to do it. That is a much better question.",
     ],
   },
   {
@@ -317,14 +334,14 @@ export const posts: Post[] = [
       "It's not the tech. It's learning to cut scope fast and still ship something real.",
     date: "2026-02-14",
     body: [
-      "At a hackathon, the clock reshapes priorities. You quickly learn that adding one feature often costs two. The real skill is choosing what to cut so the core remains polished and testable.",
-      "Winning teams rarely have the flashiest stack; they have the clearest scope. They pick a single user action and make it delightful under constraint.",
-      "Hackathons also teach rapid validation. The quickest way to know if an idea resonates is to get a prototype in front of real users and watch where they stumble.",
-      "You'll learn to automate the mundane: deploy scripts, seed databases, and small test harnesses that save time during the event and after.",
-      "Working in small cross-functional teams reveals communication friction. The teams that succeed are the teams that make decisions explicit and visible to everyone.",
-      "Finally, hackathons teach humility: your first idea will rarely be the final one. Iterate, prune, and accept that pivoting is progress.",
-      "If you treat a hackathon like a miniature product cycle — with a single hypothesis, rapid validation, and ruthless scope control — you will ship more useful things.",
-      "Those lessons carry over to regular product work: small bets, fast feedback, and clear scope often beat big plans executed slowly.",
+      "Across five hackathons the pattern is embarrassingly consistent: scope collapses. It happens at SIH, HeisenHack, DayZero, Ossome Hacks, Guidewire DevTrails, Barclays Hack-O-Hire. The name changes, the panic does not.",
+      "GigSafe was the clearest example. In Phase 1 we lost stars because we missed the core insurance requirement. That's the sort of feedback that lands like a brick because it is both correct and completely unavoidable.",
+      "Phase 2 was where we did the classic hackathon thing: ship five original innovations, get the demo into shape, and realise the elimination already happened while we were congratulating ourselves on the architecture.",
+      "That hurts, but it also teaches something useful. Hackathons are not about proving you can build everything. They are about proving you can decide what matters, fast, while the clock keeps getting louder.",
+      "The Barclays experience was almost the opposite in tone but not in lesson. We shipped a Random Forest pipeline to 82% accuracy in 24 hours, which sounds neat until you remember that the real competition is against time, not the model.",
+      "What nobody tells you is how much of the event is actually about cutting. You cut slides, features, polish, alternate flows, and sometimes the original idea, because a coherent demo beats a sprawling mess every single time.",
+      "That is why hackathons are useful even when you do not place. They force you to practice ruthless scope control under pressure, and university courses rarely simulate that kind of compression.",
+      "The actual lesson is not how to win. It is how to salvage a product shape while the deadline is already trying to kill it. That is a real engineering skill, and it shows up everywhere later.",
     ],
   },
 ];
