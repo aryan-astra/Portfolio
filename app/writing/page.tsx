@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { posts } from "@/lib/data";
-import MagneticGlowCard from "@/components/MagneticGlowCard";
 
 export const metadata: Metadata = {
   title: "Writing",
@@ -19,37 +19,37 @@ function formatDate(dateStr: string) {
 export default function WritingIndexPage() {
   return (
     <section className="section-block">
-      <div className="content-shell grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-        <div className="lg:sticky lg:top-24 lg:self-start">
-          <p className="mb-3 font-mono text-[0.68rem] tracking-[0.24em] text-muted-foreground">WRITING</p>
-          <h1 className="max-w-[9ch] font-serif text-[clamp(2.8rem,6vw,5rem)] leading-[0.92] tracking-[-0.05em] text-foreground">
-            Notes, not noise.
-          </h1>
-          <p className="mt-5 max-w-[32rem] text-[1rem] leading-relaxed text-muted-foreground">
-            Small essays on the things that broke, the things that shipped, and the weird tradeoffs that made both worth doing.
+      <div className="content-shell">
+        <div className="mb-10 grid gap-6 border-b border-border pb-8 lg:grid-cols-[0.78fr_1fr] lg:items-end">
+          <div>
+            <p className="section-label">writing</p>
+            <h1 className="max-w-[10ch] font-serif text-[clamp(3rem,8vw,6.8rem)] leading-[0.88] tracking-normal text-foreground">
+              Notes that kept the receipt.
+            </h1>
+          </div>
+          <p className="hidden max-w-[38ch] text-sm leading-relaxed text-muted-foreground lg:block">
+            Incidents, local AI, hackathons, and the parts of shipping that do not fit cleanly inside a project card.
           </p>
-          <Link href="/" className="mt-8 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.22em] text-accent-blue transition-opacity hover:opacity-70">
-            ← Back home
-          </Link>
         </div>
 
-        <div className="grid gap-3">
-          {posts.map((post) => (
-            <Link key={post.slug} href={`/writing/${post.slug}`} className="block group">
-              <MagneticGlowCard className="bg-card/70 border-border/55">
-                <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:justify-between">
-                  <div className="min-w-0 flex-1">
-                    <div className="mb-2 font-mono text-[0.65rem] uppercase tracking-[0.24em] text-muted-foreground">{formatDate(post.date)}</div>
-                    <h2 className="text-[1.05rem] font-semibold text-foreground transition-colors group-hover:text-accent-blue">
-                      {post.title}
-                    </h2>
-                    <p className="mt-2 max-w-[60ch] text-[0.97rem] leading-relaxed text-muted-foreground">
-                      {post.description}
-                    </p>
-                  </div>
-                  <span className="font-mono text-xs text-muted-foreground transition-colors group-hover:text-accent-blue">↗</span>
-                </div>
-              </MagneticGlowCard>
+        <div className="grid gap-4">
+          {posts.map((post, index) => (
+            <Link
+              key={post.slug}
+              href={`/writing/${post.slug}`}
+              className="group grid gap-5 border border-border bg-card p-5 transition-colors hover:border-highlight hover:bg-[#161616] md:grid-cols-[0.18fr_1fr_0.16fr] md:items-start"
+            >
+              <span className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">{formatDate(post.date)}</span>
+              <span>
+                <span className="block font-serif text-[clamp(1.85rem,4vw,3.4rem)] leading-[0.95] text-foreground transition-colors group-hover:text-highlight">
+                  {post.title}
+                </span>
+                <span className="mt-3 block max-w-[68ch] text-[0.98rem] leading-relaxed text-muted-foreground">{post.description}</span>
+              </span>
+              <span className="flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground transition-colors group-hover:text-highlight md:justify-self-end">
+                0{index + 1}
+                <ArrowUpRight size={14} />
+              </span>
             </Link>
           ))}
         </div>

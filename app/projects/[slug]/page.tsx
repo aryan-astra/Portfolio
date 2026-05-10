@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowUpRight, GithubLogo } from "@phosphor-icons/react/dist/ssr";
 import { projects } from "@/lib/data";
 
 type ProjectPageProps = {
@@ -16,9 +17,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   const project = projects.find((item) => item.slug === slug);
 
   if (!project) {
-    return {
-      title: "Project not found",
-    };
+    return { title: "Project not found" };
   }
 
   return {
@@ -31,97 +30,91 @@ export default async function ProjectCaseStudyPage({ params }: ProjectPageProps)
   const { slug } = await params;
   const project = projects.find((item) => item.slug === slug);
 
-  if (!project) {
-    notFound();
-  }
+  if (!project) notFound();
+
+  const sections = [
+    ["Problem", project.caseStudy.problem],
+    ["Approach", project.caseStudy.approach],
+    ["Outcome", project.caseStudy.outcome],
+  ] as const;
 
   return (
     <article className="section-block">
       <div className="content-shell">
-        <div className="max-w-[70rem]">
-        <Link
-          href="/#projects"
-          className="font-mono text-xs text-muted-foreground hover:text-accent-blue transition-colors"
-        >
-          ← Back to projects
+        <Link href="/#projects" className="site-link mono-label inline-flex transition-colors">
+          Back to projects
         </Link>
 
-        <header className="mt-6 mb-10">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent-blue mb-2">
-            Case Study
-          </p>
-          <h1 className="font-serif text-4xl md:text-5xl text-foreground leading-tight mb-3">
-            {project.name}
-          </h1>
-          <p className="text-base md:text-lg text-muted-foreground max-w-2xl">{project.oneLiner}</p>
+        <header className="mt-8 grid gap-8 border-y border-border py-8 lg:grid-cols-[0.9fr_0.55fr] lg:items-end">
+          <div>
+            <p className="section-label">case study / {project.status}</p>
+            <h1 className="font-serif text-[clamp(3rem,8vw,7rem)] leading-[0.86] tracking-normal text-foreground">
+              {project.name}
+            </h1>
+            <p className="mt-5 max-w-[48rem] text-[clamp(1rem,2vw,1.2rem)] leading-relaxed text-muted-foreground">{project.oneLiner}</p>
+          </div>
+
+          <div className="grid gap-3 border border-border bg-card/70 p-4">
+            {project.impact && (
+              <div>
+                <p className="mono-label text-muted-foreground">impact</p>
+                <p className="mt-1 text-2xl font-semibold text-highlight">{project.impact}</p>
+              </div>
+            )}
+            <div>
+              <p className="mono-label text-muted-foreground">stack</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {project.caseStudy.stack.map((item) => (
+                  <span key={item} className="border border-border px-2 py-1 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-muted-foreground">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
         </header>
 
-        <div className="space-y-10">
-          <section>
-            <h2 className="font-sans text-xl font-semibold text-foreground mb-3">Problem</h2>
-            <p className="text-muted-foreground leading-relaxed">{project.caseStudy.problem}</p>
-          </section>
-
-          <section>
-            <h2 className="font-sans text-xl font-semibold text-foreground mb-3">Approach</h2>
-            <p className="text-muted-foreground leading-relaxed">{project.caseStudy.approach}</p>
-          </section>
-
-          <section>
-            <h2 className="font-sans text-xl font-semibold text-foreground mb-3">Stack</h2>
-            <div className="flex flex-wrap gap-2">
-              {project.caseStudy.stack.map((item) => (
-                <span
-                  key={item}
-                  className="font-mono text-xs bg-muted text-muted-foreground px-2 py-1 rounded-sm"
-                >
-                  {item}
-                </span>
-              ))}
+        <div className="mt-10 grid gap-8 lg:grid-cols-[0.62fr_1fr]">
+          <aside className="lg:sticky lg:top-24 lg:self-start">
+            <div className="border border-border bg-card/70 p-4">
+              <p className="mono-label mb-4 text-highlight">links</p>
+              <div className="grid gap-2">
+                {project.github && (
+                  <a href={project.github} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between border border-border bg-background/35 px-3 py-3 text-sm text-foreground transition-colors hover:border-highlight hover:text-highlight">
+                    <span className="flex items-center gap-2"><GithubLogo size={16} /> Source</span>
+                    <ArrowUpRight size={14} />
+                  </a>
+                )}
+                {project.live && (
+                  <a href={project.live} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between border border-border bg-background/35 px-3 py-3 text-sm text-foreground transition-colors hover:border-highlight hover:text-highlight">
+                    <span>Live surface</span>
+                    <ArrowUpRight size={14} />
+                  </a>
+                )}
+              </div>
             </div>
-          </section>
+          </aside>
 
-          <section>
-            <h2 className="font-sans text-xl font-semibold text-foreground mb-3">Key Decisions</h2>
-            <ul className="space-y-3">
-              {project.caseStudy.keyDecisions.map((decision) => (
-                <li key={decision} className="text-muted-foreground leading-relaxed">
-                  <span className="text-accent-blue mr-2">•</span>
-                  {decision}
-                </li>
-              ))}
-            </ul>
-          </section>
+          <div className="grid gap-6">
+            {sections.map(([title, body]) => (
+              <section key={title} className="border border-border bg-card/70 p-5">
+                <p className="mono-label mb-4 text-highlight">{title}</p>
+                <p className="max-w-[76ch] text-[1rem] leading-[1.8] text-muted-foreground">{body}</p>
+              </section>
+            ))}
 
-          <section>
-            <h2 className="font-sans text-xl font-semibold text-foreground mb-3">Outcome</h2>
-            <p className="text-muted-foreground leading-relaxed">{project.caseStudy.outcome}</p>
-            {project.impact && <p className="mt-3 text-accent-blue font-medium text-sm">{project.impact}</p>}
-          </section>
-        </div>
-
-        <footer className="mt-12 flex flex-wrap gap-4 pt-2">
-          {project.github && (
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono text-xs text-muted-foreground hover:text-accent-blue transition-colors"
-            >
-              GitHub ↗
-            </a>
-          )}
-          {project.live && (
-            <a
-              href={project.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono text-xs text-muted-foreground hover:text-accent-blue transition-colors"
-            >
-              Live ↗
-            </a>
-          )}
-        </footer>
+            <section className="border border-border bg-card/70 p-5">
+              <p className="mono-label mb-4 text-highlight">Key decisions</p>
+              <div className="grid gap-3">
+                {project.caseStudy.keyDecisions.map((decision, index) => (
+                  <div key={decision} className="grid gap-3 border-b border-border pb-3 last:border-b-0 last:pb-0 sm:grid-cols-[3rem_1fr]">
+                    <span className="font-mono text-sm text-muted-foreground">0{index + 1}</span>
+                    <p className="leading-relaxed text-muted-foreground">{decision}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
         </div>
       </div>
     </article>

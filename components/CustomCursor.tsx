@@ -68,8 +68,9 @@ export default function CustomCursor() {
       aria-hidden
       className="pointer-events-none fixed z-[200] h-3 w-3 rounded-full"
       style={{
-        background: "rgba(242, 239, 236, 0.9)",
-        border: "1px solid rgba(13, 12, 11, 0.3)",
+        background: "var(--highlight)",
+        border: "1px solid rgba(23, 20, 17, 0.45)",
+        boxShadow: "0 0 22px color-mix(in srgb, var(--highlight) 65%, transparent)",
         transform: "translate3d(50vw, 50vh, 0)",
       }}
     />

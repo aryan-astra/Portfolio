@@ -2,77 +2,45 @@
 
 import { motion } from "framer-motion";
 import { skills } from "@/lib/data";
-import MagneticGlowCard from "@/components/MagneticGlowCard";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
-
-const categoryIcons: Record<string, string> = {
-  Languages: "{ }",
-  Frameworks: "⬡",
-  Cloud: "☁",
-  Tools: "⚙",
-  Concepts: "◈",
-};
+const tones = ["text-highlight", "text-foreground/60", "text-foreground/60", "text-foreground/60", "text-foreground/60"];
 
 export default function Skills() {
   return (
     <section id="skills" className="section-block">
       <div className="content-shell">
-        <motion.div
-          variants={fadeUp}
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="mb-10"
-        >
-          <p className="mb-2 font-mono text-[0.68rem] tracking-[0.22em] text-muted-foreground">STACK</p>
-          <h2 className="max-w-[17ch] font-serif text-[clamp(2.05rem,4vw,3.2rem)] leading-[1.02] tracking-[-0.01em] text-foreground">
-            What I actually use.
-          </h2>
-        </motion.div>
+        <div className="mb-10 flex items-end justify-between gap-4">
+          <div>
+            <p className="section-label">stack</p>
+            <h2 className="section-title">Tools, but with context.</h2>
+          </div>
+          <p className="hidden max-w-[38ch] text-sm leading-relaxed text-muted-foreground lg:block">
+            A stack list is only useful when it hints at judgment. These are the pieces I keep reaching for when the shape of the product matters.
+          </p>
+        </div>
 
-        <motion.div
-          variants={fadeUp}
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
-          className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-4"
-        >
-          {Object.entries(skills).map(([category, items], i) => (
+        <div className="grid border border-border bg-card/70 md:grid-cols-5">
+          {Object.entries(skills).map(([category, items], index) => (
             <motion.div
               key={category}
-              variants={fadeUp}
-              whileInView="visible"
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 + i * 0.06 }}
+              transition={{ duration: 0.36, delay: index * 0.05 }}
+              className="border-b border-border p-4 md:border-b-0 md:border-r md:last:border-r-0"
             >
-              <MagneticGlowCard className="h-full p-4">
-                {/* Category header */}
-                <div className="flex items-center gap-2 mb-3">
-                  <span
-                    className="font-mono text-base text-muted-foreground group-hover:text-accent-blue transition-colors duration-200"
-                    aria-hidden="true"
-                  >
-                    {categoryIcons[category] ?? "·"}
-                  </span>
-                  <p className="font-mono text-[0.65rem] uppercase tracking-widest text-muted-foreground">{category}</p>
-                </div>
-
-                {/* Items */}
-                <ul className="space-y-1.5">
-                  {items.map((skill) => (
-                    <li key={skill}>
-                      <p className="text-sm leading-snug text-foreground">{skill}</p>
-                    </li>
-                  ))}
-                </ul>
-              </MagneticGlowCard>
+              <p className={`mono-label mb-5 ${tones[index % tones.length]}`}>{category}</p>
+              <ul className="space-y-3">
+                {items.map((skill) => (
+                  <li key={skill} className="flex items-start gap-2 text-sm leading-snug text-foreground">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 bg-highlight" aria-hidden="true" />
+                    {skill}
+                  </li>
+                ))}
+              </ul>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

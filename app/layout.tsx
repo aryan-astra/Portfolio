@@ -4,7 +4,6 @@ import { DM_Sans, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import ButterflyBackground from "@/components/ButterflyBackground";
 import CustomCursor from "@/components/CustomCursor";
 
 const dmSans = DM_Sans({
@@ -58,12 +57,11 @@ export default function RootLayout({
           id="theme-script"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');}catch(e){}`,
+            __html: `try{var t=localStorage.getItem('theme');if(t!=='light')document.documentElement.classList.add('dark');}catch(e){document.documentElement.classList.add('dark');}`,
           }}
         />
       </head>
       <body className="min-h-screen flex flex-col bg-background text-foreground antialiased relative overflow-x-clip">
-        <ButterflyBackground />
         <CustomCursor />
         <Navbar />
         <main className="flex-1 relative z-10" id="main-content">

@@ -2,16 +2,10 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowUpRight } from "@phosphor-icons/react";
+import { ArrowUpRight, GithubLogo } from "@phosphor-icons/react";
 import { projects } from "@/lib/data";
-import MagneticGlowCard from "@/components/MagneticGlowCard";
 
-const featured = projects.filter((p) => p.featured);
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
+const featured = projects.filter((project) => project.featured);
 
 export default function FeaturedWork() {
   if (featured.length === 0) return null;
@@ -19,94 +13,79 @@ export default function FeaturedWork() {
   return (
     <section id="featured" className="section-block">
       <div className="content-shell">
-        <motion.div
-          variants={fadeUp}
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="mb-10"
-        >
-          <p className="mb-2 font-mono text-[0.68rem] tracking-[0.22em] text-accent-blue">FEATURED WORK</p>
-          <h2 className="max-w-[16ch] font-serif text-[clamp(2.05rem,4vw,3.2rem)] leading-[1.02] tracking-[-0.01em] text-foreground">
-            Proof of work.
-          </h2>
-        </motion.div>
+        <div className="mb-10 flex items-end justify-between gap-4">
+          <div>
+            <p className="section-label">featured work</p>
+            <h2 className="section-title">Two things that escaped localhost.</h2>
+          </div>
+          <p className="hidden max-w-[38ch] text-sm leading-relaxed text-muted-foreground lg:block">
+            Real users, real constraints, production failures and rough edges that taught me where the system was honest.
+          </p>
+        </div>
 
-        <div className="grid lg:grid-cols-2 gap-5">
-          {featured.map((project, i) => (
-            <motion.div
-              key={project.name}
-              variants={fadeUp}
-              whileInView="visible"
+        <div className="grid gap-px bg-border lg:grid-cols-2">
+          {featured.map((project, index) => (
+            <motion.article
+              key={project.slug}
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.1 }}
+              transition={{ duration: 0.4, delay: index * 0.07 }}
+              className="group relative grid grid-rows-[auto_1fr_auto] gap-6 bg-card p-6 transition-colors hover:bg-secondary"
             >
-              <MagneticGlowCard className="h-full group">
-                <article className="flex flex-col gap-4 p-6 h-full">
-                  {/* Header */}
-                  <div className="flex items-start justify-between gap-3">
-                    <h3 className="text-lg font-semibold text-card-foreground">{project.name}</h3>
-                    <span className="shrink-0 w-5 h-5 flex items-center justify-center text-muted-foreground group-hover:text-accent-blue transition-colors duration-200">
-                      <ArrowUpRight size={16} aria-hidden="true" />
+              {/* Header */}
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="mono-label mb-3 text-highlight">{project.impact ?? project.status}</p>
+                  <h3 className="font-serif leading-none text-foreground" style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)" }}>
+                    {project.name}
+                  </h3>
+                </div>
+                <span className="font-mono text-[0.65rem] text-muted-foreground">0{index + 1}</span>
+              </div>
+
+              {/* Body */}
+              <div>
+                <p className="text-[0.95rem] leading-relaxed text-muted-foreground">{project.oneLiner}</p>
+                <div className="mt-5 flex flex-wrap gap-1.5">
+                  {project.tags.slice(0, 5).map((tag) => (
+                    <span key={tag} className="border border-border px-2 py-0.5 font-mono text-[0.62rem] uppercase tracking-widest text-muted-foreground">
+                      {tag}
                     </span>
-                  </div>
+                  ))}
+                </div>
+              </div>
 
-                  {/* Impact line */}
-                  {project.impact && (
-                    <p className="text-sm font-medium text-accent-blue">{project.impact}</p>
-                  )}
-
-                  {/* Description */}
-                  <div className="flex-1">
-                    <p className="text-[0.98rem] leading-relaxed text-muted-foreground">{project.oneLiner}</p>
-                  </div>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5 mt-2">
-                    {project.tags.slice(0, 4).map((tag) => (
-                      <span
-                        key={tag}
-                        className="bg-muted px-2 py-0.5 rounded-sm"
-                      >
-                        <span className="font-mono text-[0.65rem] text-muted-foreground">{tag}</span>
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="flex items-center gap-4 pt-1">
-                    <Link
-                      href={`/projects/${project.slug}`}
-                      className="font-mono text-xs text-accent-blue hover:opacity-70 transition-opacity duration-200"
-                      aria-label={`Read ${project.name} case study`}
-                    >
-                      Case Study →
-                    </Link>
-                    {project.github && (
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-mono text-xs text-muted-foreground hover:text-accent-blue transition-colors duration-200"
-                        aria-label={`View ${project.name} on GitHub`}
-                      >
-                        GitHub ↗
-                      </a>
-                    )}
-                    {project.live && (
-                      <a
-                        href={project.live}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-mono text-xs text-muted-foreground hover:text-accent-blue transition-colors duration-200"
-                        aria-label={`View ${project.name} live`}
-                      >
-                        Live ↗
-                      </a>
-                    )}
-                  </div>
-                </article>
-              </MagneticGlowCard>
-            </motion.div>
+              {/* Footer links */}
+              <div className="flex flex-wrap items-center gap-5 border-t border-border pt-4">
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="inline-flex items-center gap-1.5 font-mono text-[0.7rem] uppercase tracking-wider text-highlight hover:text-foreground transition-colors"
+                >
+                  case study <ArrowUpRight size={13} />
+                </Link>
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 font-mono text-[0.7rem] uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <GithubLogo size={13} /> source
+                  </a>
+                )}
+                {project.live && (
+                  <a
+                    href={project.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 font-mono text-[0.7rem] uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    live <ArrowUpRight size={13} />
+                  </a>
+                )}
+              </div>
+            </motion.article>
           ))}
         </div>
       </div>

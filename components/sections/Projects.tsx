@@ -3,214 +3,79 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { projects, type Project } from "@/lib/data";
-import MagneticGlowCard from "@/components/MagneticGlowCard";
+import { ArrowUpRight, CaretDown } from "@phosphor-icons/react";
+import { projects } from "@/lib/data";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
-
-function StatusBadge({ status }: { status: Project["status"] }) {
-  if (status === "active") return null;
-
-  const label = status === "shipped" ? "shipped" : "archived";
-
-  return (
-    <span className="px-2 py-0.5 rounded-sm border border-border/40">
-      <span className="font-mono text-[0.65rem] text-muted-foreground/60">{label}</span>
-    </span>
-  );
-}
-
-function ProjectCard({ project, featured }: { project: Project; featured?: boolean }) {
-  return (
-    <MagneticGlowCard className="h-full">
-      <article className={`flex flex-col gap-4 h-full ${featured ? "p-6" : "p-5"}`}>
-        {/* Header */}
-        <div className="flex items-start justify-between gap-3">
-          <h3 className={`font-semibold text-card-foreground ${featured ? "text-lg" : "text-base"}`}>{project.name}</h3>
-          <StatusBadge status={project.status} />
-        </div>
-
-        {/* Description */}
-        <div className="flex-1">
-          <p className={`leading-relaxed text-muted-foreground ${featured ? "text-base" : "text-[0.97rem]"}`}>
-            {project.oneLiner}
-          </p>
-          {featured && project.description && (
-            <p className="text-sm text-muted-foreground/80 mt-3">{project.description}</p>
-          )}
-        </div>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-1.5">
-          {project.tags.map((tag) => (
-            <span key={tag} className="bg-muted px-2 py-0.5 rounded-sm">
-              <span className="font-mono text-[0.65rem] text-muted-foreground">{tag}</span>
-            </span>
-          ))}
-        </div>
-
-        {/* Links */}
-        <div className="flex items-center gap-4 pt-2">
-          <Link
-            href={`/projects/${project.slug}`}
-            className="font-mono text-xs text-accent-blue hover:opacity-70 transition-opacity duration-200"
-            aria-label={`Read ${project.name} case study`}
-          >
-            Case Study →
-          </Link>
-          {project.github && (
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono text-xs text-muted-foreground hover:text-accent-blue transition-colors duration-200"
-              aria-label={`View ${project.name} on GitHub`}
-            >
-              GitHub ↗
-            </a>
-          )}
-          {project.live && (
-            <a
-              href={project.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono text-xs text-muted-foreground hover:text-accent-blue transition-colors duration-200"
-              aria-label={`View ${project.name} live`}
-            >
-              Live ↗
-            </a>
-          )}
-        </div>
-      </article>
-    </MagneticGlowCard>
-  );
-}
+const mainProjects = projects.filter((project) => !project.featured && !project.secondary);
+const secondaryProjects = projects.filter((project) => project.secondary);
 
 export default function Projects() {
-  const featuredProjects = projects.filter((p) => p.featured);
-  const mainProjects = projects.filter((p) => !p.featured && !p.secondary);
-  const secondaryProjects = projects.filter((p) => p.secondary);
   const [secondaryOpen, setSecondaryOpen] = useState(false);
 
   return (
     <section id="projects" className="section-block">
       <div className="content-shell">
-        {/* Section Header */}
-        <motion.div
-          variants={fadeUp}
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="mb-12"
-        >
-          <p className="mb-2 font-mono text-[0.68rem] tracking-[0.22em] text-muted-foreground">PROJECTS</p>
-          <h2 className="max-w-[16ch] font-serif text-[clamp(2.05rem,4vw,3.2rem)] leading-[1.02] tracking-[-0.01em] text-foreground">
-            Things I&apos;ve shipped.
-          </h2>
-        </motion.div>
-
-        {/* FEATURED: Full width, stacked */}
-        {featuredProjects.length > 0 && (
-          <div className="mb-16">
-            <motion.h3
-              initial={fadeUp.hidden}
-              whileInView="visible"
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="font-mono text-[0.75rem] tracking-[0.15em] text-muted-foreground mb-4 uppercase"
-            >
-              Featured
-            </motion.h3>
-            <div className="space-y-4">
-              {featuredProjects.map((project, idx) => (
-                <motion.div
-                  key={project.slug}
-                  variants={fadeUp}
-                  whileInView="visible"
-                  viewport={{ once: true, margin: "-80px" }}
-                  transition={{ delay: idx * 0.08 }}
-                >
-                  <ProjectCard project={project} featured />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* MAIN: Grid */}
-        {mainProjects.length > 0 && (
-          <div className="mb-16">
-            <motion.h3
-              initial={fadeUp.hidden}
-              whileInView="visible"
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="font-mono text-[0.75rem] tracking-[0.15em] text-muted-foreground mb-4 uppercase"
-            >
-              Main Projects
-            </motion.h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              {mainProjects.map((project, idx) => (
-                <motion.div
-                  key={project.slug}
-                  variants={fadeUp}
-                  whileInView="visible"
-                  viewport={{ once: true, margin: "-80px" }}
-                  transition={{ delay: idx * 0.08 }}
-                >
-                  <ProjectCard project={project} />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* SECONDARY: Compact list */}
-        {secondaryProjects.length > 0 && (
+        <div className="mb-10 flex items-end justify-between gap-4">
           <div>
-            <div className="mb-4 flex items-center justify-between gap-4">
-              <motion.h3
-                initial={fadeUp.hidden}
-                whileInView="visible"
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="font-mono text-[0.75rem] tracking-[0.15em] text-muted-foreground uppercase"
-              >
-                Other Projects
-              </motion.h3>
-              <button
-                type="button"
-                onClick={() => setSecondaryOpen((value) => !value)}
-                className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {secondaryOpen ? "Collapse" : `Show ${secondaryProjects.length}`}
-              </button>
-            </div>
+            <p className="section-label">project index</p>
+            <h2 className="section-title">A bench of smaller experiments.</h2>
+          </div>
+          <p className="hidden max-w-[38ch] text-sm leading-relaxed text-muted-foreground lg:block">
+            Smaller surfaces, shipped experiments, and half-answered questions that might become larger systems later.
+          </p>
+        </div>
+
+        <div className="border-t border-border">
+          {mainProjects.map((project, index) => (
+            <motion.div
+              key={project.slug}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.38, delay: index * 0.05 }}
+            >
+              <Link href={`/projects/${project.slug}`} className="group grid gap-4 border-b border-border py-5 transition-colors hover:bg-[#161616] md:grid-cols-[0.16fr_0.9fr_1.2fr_0.5fr] md:items-center md:px-3">
+                <span className="font-mono text-[0.7rem] text-muted-foreground">{String(index + 1).padStart(2, "0")}</span>
+                <span className="font-serif text-[clamp(1.7rem,3vw,2.6rem)] leading-none text-foreground transition-colors group-hover:text-highlight">
+                  {project.name}
+                </span>
+                <span className="max-w-[60ch] text-[0.98rem] leading-relaxed text-muted-foreground">{project.oneLiner}</span>
+                <span className="flex items-center gap-2 font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground transition-colors group-hover:text-highlight md:justify-self-end">
+                  {project.status}
+                  <ArrowUpRight size={14} />
+                </span>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+
+        {secondaryProjects.length > 0 && (
+          <div className="mt-8 border border-border bg-card/70">
+            <button
+              type="button"
+              onClick={() => setSecondaryOpen((value) => !value)}
+              className="flex w-full items-center justify-between gap-4 px-4 py-4 text-left"
+              aria-expanded={secondaryOpen}
+            >
+              <span>
+                <span className="mono-label block text-highlight">side quests</span>
+                <span className="mt-1 block text-sm text-muted-foreground">{secondaryProjects.length} compact project{secondaryProjects.length === 1 ? "" : "s"}</span>
+              </span>
+              <CaretDown className={`text-highlight transition-transform ${secondaryOpen ? "rotate-180" : ""}`} size={18} />
+            </button>
+
             {secondaryOpen && (
-              <motion.div
-                initial={fadeUp.hidden}
-                whileInView="visible"
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ delay: 0.1 }}
-                className="space-y-2 pl-4 border-l border-border"
-              >
+              <div className="border-t border-border">
                 {secondaryProjects.map((project) => (
-                  <Link key={project.slug} href={`/projects/${project.slug}`} className="block group">
-                    <div className="flex items-start justify-between gap-4 py-2 -ml-4 pl-4 hover:bg-muted/30 transition-colors rounded-sm">
-                      <div className="flex-1">
-                        <h4 className="font-medium text-foreground group-hover:text-accent-blue transition-colors">
-                          {project.name}
-                        </h4>
-                        <p className="text-sm text-muted-foreground mt-0.5">{project.oneLiner}</p>
-                      </div>
-                      <span className="shrink-0 text-muted-foreground group-hover:text-accent-blue transition-colors">→</span>
-                    </div>
+                  <Link key={project.slug} href={`/projects/${project.slug}`} className="group flex items-start justify-between gap-4 border-b border-border px-4 py-4 last:border-b-0 hover:bg-[#161616]">
+                    <span>
+                      <span className="block font-medium text-foreground transition-colors group-hover:text-highlight">{project.name}</span>
+                      <span className="mt-1 block text-sm leading-relaxed text-muted-foreground">{project.oneLiner}</span>
+                    </span>
+                    <ArrowUpRight size={14} className="mt-1 shrink-0 text-muted-foreground transition-colors group-hover:text-highlight" />
                   </Link>
                 ))}
-              </motion.div>
+              </div>
             )}
           </div>
         )}
