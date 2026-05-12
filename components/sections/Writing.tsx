@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "@phosphor-icons/react";
 import { posts } from "@/lib/data";
+import ScatterField from "@/components/ScatterField";
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-US", {
@@ -16,16 +17,17 @@ function formatDate(dateStr: string) {
 export default function Writing() {
   return (
     <section id="writing" className="section-block">
+      <ScatterField variant="writing" />
       <div className="content-shell">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="mb-10"
+          className="mb-6"
         >
           <p className="section-label">Writing</p>
-          <h2 className="mt-3 max-w-[16ch] font-serif text-[clamp(2.05rem,4vw,3.2rem)] leading-[1.02] text-foreground">
+          <h2 className="mt-3 max-w-[16ch] font-serif text-[clamp(1.5rem,3vw,2.2rem)] leading-[1.02] text-foreground">
             Thinking out loud.
           </h2>
         </motion.div>

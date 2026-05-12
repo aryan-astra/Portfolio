@@ -9,7 +9,7 @@ export default function Skills() {
   return (
     <section id="skills" className="section-block">
       <div className="content-shell">
-        <div className="mb-10 flex items-end justify-between gap-4">
+        <div className="mb-6 flex items-end justify-between gap-4">
           <div>
             <p className="section-label">stack</p>
             <h2 className="section-title">Tools, but with context.</h2>

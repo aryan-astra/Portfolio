@@ -13,7 +13,7 @@ export default function FeaturedWork() {
   return (
     <section id="featured" className="section-block">
       <div className="content-shell">
-        <div className="mb-10 flex items-end justify-between gap-4">
+        <div className="mb-6 flex items-end justify-between gap-4">
           <div>
             <p className="section-label">featured work</p>
             <h2 className="section-title">Two things that escaped localhost.</h2>

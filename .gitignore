@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+# Local testing artifacts
+.playwright-mcp/
+audits/
+octo-redesign-verify.png
+*.tsx.bak
+.vscode/mcp.json

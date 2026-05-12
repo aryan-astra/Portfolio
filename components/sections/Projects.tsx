@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowUpRight, CaretDown } from "@phosphor-icons/react";
 import { projects } from "@/lib/data";
+import ScatterField from "@/components/ScatterField";
 
 const mainProjects = projects.filter((project) => !project.featured && !project.secondary);
 const secondaryProjects = projects.filter((project) => project.secondary);
@@ -14,8 +15,9 @@ export default function Projects() {
 
   return (
     <section id="projects" className="section-block">
+      <ScatterField variant="projects" />
       <div className="content-shell">
-        <div className="mb-10 flex items-end justify-between gap-4">
+        <div className="mb-6 flex items-end justify-between gap-4">
           <div>
             <p className="section-label">project index</p>
             <h2 className="section-title">A bench of smaller experiments.</h2>

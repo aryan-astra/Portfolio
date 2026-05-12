@@ -2,14 +2,17 @@
 
 import { motion } from "framer-motion";
 import { hackathons } from "@/lib/data";
+import ScatterField from "@/components/ScatterField";
+import LetterPill from "@/components/LetterPill";
 
 const sorted = [...hackathons].sort((a, b) => b.year - a.year || a.event.localeCompare(b.event));
 
 export default function Hackathons() {
   return (
     <section id="hackathons" className="section-block">
+      <ScatterField variant="hackathons" />
       <div className="content-shell">
-        <div className="mb-10 grid gap-5 lg:grid-cols-[0.7fr_1fr] lg:items-end">
+        <div className="mb-6 grid gap-5 lg:grid-cols-[0.7fr_1fr] lg:items-end">
           <div>
             <p className="section-label">hackathons</p>
             <h2 className="section-title">Short clocks, useful scars.</h2>
@@ -39,9 +42,12 @@ export default function Hackathons() {
                 <p className="text-sm leading-relaxed text-muted-foreground">{entry.description}</p>
                 <div className="flex flex-wrap gap-2 md:justify-end">
                   {entry.team && <span className="border border-border px-2 py-1 font-mono text-[0.62rem] uppercase tracking-[0.12em] text-muted-foreground">{entry.team}</span>}
-                  <span className={`border px-2 py-1 font-mono text-[0.62rem] uppercase tracking-[0.12em] ${qualified ? "border-highlight text-highlight" : "border-border text-muted-foreground"}`}>
-                    {entry.result}
-                  </span>
+                  {qualified && (
+                    <LetterPill
+                      text={entry.result}
+                      pillClassName="border-highlight text-highlight"
+                    />
+                  )}
                 </div>
               </motion.article>
             );

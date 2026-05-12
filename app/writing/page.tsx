@@ -23,7 +23,7 @@ export default function WritingIndexPage() {
         <div className="mb-10 grid gap-6 border-b border-border pb-8 lg:grid-cols-[0.78fr_1fr] lg:items-end">
           <div>
             <p className="section-label">writing</p>
-            <h1 className="max-w-[10ch] font-serif text-[clamp(3rem,8vw,6.8rem)] leading-[0.88] tracking-normal text-foreground">
+            <h1 className="max-w-[10ch] font-serif text-[clamp(2rem,5vw,4rem)] leading-[0.9] tracking-normal text-foreground">
               Notes that kept the receipt.
             </h1>
           </div>
@@ -41,7 +41,7 @@ export default function WritingIndexPage() {
             >
               <span className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">{formatDate(post.date)}</span>
               <span>
-                <span className="block font-serif text-[clamp(1.85rem,4vw,3.4rem)] leading-[0.95] text-foreground transition-colors group-hover:text-highlight">
+                <span className="block font-serif text-[clamp(1.3rem,2.5vw,2rem)] leading-[1.0] text-foreground transition-colors group-hover:text-highlight">
                   {post.title}
                 </span>
                 <span className="mt-3 block max-w-[68ch] text-[0.98rem] leading-relaxed text-muted-foreground">{post.description}</span>

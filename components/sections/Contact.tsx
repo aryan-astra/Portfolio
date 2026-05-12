@@ -1,13 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Envelope, GithubLogo, LinkedinLogo, TwitterLogo } from "@phosphor-icons/react";
+import { Envelope, GithubLogo, LinkedinLogo, XLogo } from "@phosphor-icons/react";
 import { contact } from "@/lib/data";
 
 const links = [
   { label: contact.email, href: `mailto:${contact.email}`, icon: Envelope },
   { label: "github.com/aryan-astra", href: contact.github, icon: GithubLogo },
-  { label: "x.com/aryanxastra", href: contact.twitter, icon: TwitterLogo },
+  { label: "x.com/aryanxastra", href: contact.twitter, icon: XLogo },
   { label: "linkedin.com/in/aryanworks", href: contact.linkedin, icon: LinkedinLogo },
 ];
 
@@ -24,7 +24,7 @@ export default function Contact() {
         >
           <div>
             <p className="section-label">contact</p>
-            <h2 className="mt-4 max-w-[10ch] font-serif text-[clamp(2.7rem,7vw,6rem)] leading-[0.9] tracking-normal text-foreground">
+            <h2 className="mt-3 max-w-[10ch] font-serif text-[clamp(1.8rem,3.5vw,3rem)] leading-[0.95] tracking-normal text-foreground">
               Bring a strange brief.
             </h2>
             <p className="mt-5 max-w-[44rem] text-[1rem] leading-relaxed text-muted-foreground">
@@ -39,11 +39,11 @@ export default function Contact() {
                 href={href}
                 target={href.startsWith("mailto:") ? undefined : "_blank"}
                 rel={href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-                className="group flex items-center justify-between gap-4 border border-border bg-background px-4 py-3 text-foreground transition-colors hover:border-highlight hover:bg-[#161616]"
+                className="group flex items-center justify-between gap-4 border border-border bg-background px-4 py-3 text-foreground transition-colors hover:border-highlight hover:bg-secondary dark:hover:bg-[#1a1a16]"
               >
                 <span className="flex min-w-0 items-center gap-3">
                   <Icon size={18} className="shrink-0 text-highlight" />
-                  <span className="truncate text-sm">{label}</span>
+                  <span className="truncate text-sm text-foreground">{label}</span>
                 </span>
                 <span className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-muted-foreground group-hover:text-highlight">open</span>
               </a>

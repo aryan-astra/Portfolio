@@ -40,7 +40,7 @@ export const heroSubtext = `I'm Aryan — a CS sophomore at SRMIST building thin
 Sometimes they work. Sometimes they break. Both are useful.`;
 
 export const contact = {
-  email: "ryanxastra@gmail.com",
+  email: "aryanworks@hotmail.com",
   github: "https://github.com/aryan-astra",
   twitter: "https://x.com/aryanxastra",
   linkedin: "https://linkedin.com/in/aryanworks",
@@ -55,8 +55,8 @@ export const projects: Project[] = [
     description:
       "A mobile-first PWA replacing SRMIST's official academic portal. Real session auth against the live university backend, zero scraping. Redis-backed persistence, adaptive attendance polling, grade-boundary projections, day-order timetable, and VAPID push notifications with foreground self-heal.",
     tags: ["Next.js", "Cloudflare Workers", "Hono", "KV", "PWA", "Redis"],
-    github: "https://github.com/aryan-astra/arch-srm",
-    live: "https://arch-srm.pages.dev",
+    github: "https://github.com/aryan-astra/Arch",
+    live: "https://archsrm.netlify.app",
     status: "active",
     featured: true,
     impact: "300+ DAU · word-of-mouth only",
@@ -82,7 +82,7 @@ export const projects: Project[] = [
     description:
       "Windows OS automation agent powered by a local Qwen3:4b model via Ollama. Controls the browser through Playwright and the desktop through pyautogui. ML intent router (TF-IDF + Random Forest on CLINC150, 75–85% accuracy) dispatches commands to a closed-loop ReAct executor with structured eval logging.",
     tags: ["Python", "Qwen3", "Ollama", "Playwright", "scikit-learn", "Textual TUI"],
-    github: "https://github.com/aryan-astra/voco",
+    github: "https://github.com/aryan-astra/Voco-Autonomous-Agent",
     status: "active",
     featured: true,
     impact: "Fully offline — no API key required",
@@ -110,7 +110,7 @@ export const projects: Project[] = [
     description:
       "Android music player (Kotlin/Compose/Media3) with a pure AGSL Liquid Glass visualizer — SDF refraction geometry generated directly in AGSL shader code, no image-processing libraries. RenderEffect blur fallback for API 26–32. Word-level TTML/LRC lyrics sync. Multi-instance latency-aware racing for lossless quality.",
     tags: ["Kotlin", "Jetpack Compose", "Media3", "AGSL", "MediaSession"],
-    github: "https://github.com/aryan-astra/maxq",
+    github: "https://github.com/aryan-astra/MaxQ",
     status: "active",
     featured: false,
     caseStudy: {
@@ -135,8 +135,8 @@ export const projects: Project[] = [
     description:
       "C++23 desktop application (ImGui + GLFW + OpenGL) that splits large video files under Telegram's 2 GB hard limit. GOP-aware keyframe detection ensures no broken frames at cut boundaries. VBR-safe size precision engine accounts for variable bitrate when targeting segment sizes. Statically linked portable EXE.",
     tags: ["C++23", "FFmpeg", "ImGui", "GLFW", "OpenGL", "GitHub Actions"],
-    github: "https://github.com/aryan-astra/monosect",
-    live: "https://github.com/aryan-astra/monosect/releases/tag/v1.1.0",
+    github: "https://github.com/aryan-astra/Monosect",
+    live: "https://github.com/aryan-astra/Monosect/releases/tag/v1.1.0",
     status: "shipped",
     featured: false,
     caseStudy: {
@@ -161,7 +161,7 @@ export const projects: Project[] = [
     description:
       "Chrome extension (formerly ChatGPT Enhanced) enhancing AI chat platforms with: typing lag fix, compact icon sidebar, bulk archive/delete via injected checkboxes, model badge display, context usage bar, and date-grouped conversation history. v3.5.2 publicly shipped. Expanding to Claude and Gemini.",
     tags: ["JavaScript", "Chrome Extension API", "Playwright", "GitHub Actions"],
-    github: "https://github.com/aryan-astra/modus",
+    github: "https://github.com/aryan-astra/Modus",
     live: "https://themodus.netlify.app",
     status: "active",
     featured: false,
@@ -187,7 +187,7 @@ export const projects: Project[] = [
     description:
       "TypeScript CLI (`ratify submit`) wrapping git to capture commit metadata and route changes through a developer → manager → senior manager approval workflow based on file-risk classification. Next.js dashboard for hierarchical review. PostgreSQL persistence.",
     tags: ["TypeScript", "Next.js", "Node.js", "PostgreSQL", "CLI"],
-    github: "https://github.com/aryan-astra/ratify",
+    github: "https://github.com/aryan-astra/Ratify",
     status: "active",
     featured: false,
     caseStudy: {
@@ -207,6 +207,31 @@ export const projects: Project[] = [
   },
 
     // ─── SECONDARY PROJECTS (shown in compact list, not full cards) ──────────────
+  {
+    slug: "rna-synthesis",
+    name: "RNA Synthesis Visualizer",
+    oneLiner: "DNA → RNA transcription visualizer with 3D helix and animated base-pair display.",
+    description:
+      "Interactive computational biology tool (Python / Tkinter / Matplotlib) that animates the DNA-to-RNA transcription process step by step. Renders a 3D double helix, highlights complementary base pairs, and visualises the polymerase scan in real time. Built for a first-semester comp-bio course, deployed as a desktop GUI.",
+    tags: ["Python", "Tkinter", "Matplotlib", "Bioinformatics", "3D Visualisation"],
+    github: "https://github.com/aryan-astra/RNA-Synthesis",
+    status: "shipped",
+    secondary: true,
+    caseStudy: {
+      problem:
+        "Transcription diagrams in textbooks are static. A first-semester course needed a dynamic tool that makes base-pair complementarity and polymerase traversal intuitive.",
+      approach:
+        "Pure Python desktop app with Tkinter for controls and Matplotlib for the animated 3D helix. Each transcription step is rendered frame by frame so the visual matches the algorithmic process.",
+      stack: ["Python", "Tkinter", "Matplotlib"],
+      keyDecisions: [
+        "Matplotlib 3D axes for helix geometry — no external game engines or WebGL.",
+        "Animated frame loop tied to transcription state, not a timer, for educational clarity.",
+        "Self-contained desktop GUI: one script, zero server dependency.",
+      ],
+      outcome:
+        "Shipped for the computational biology module. Demonstrates Python visualisation and biology domain awareness.",
+    },
+  },
   {
     slug: "img-market",
     name: "img-market",
