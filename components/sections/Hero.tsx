@@ -46,9 +46,9 @@ function DecodedName({
   text,
   reducedMotion,
 }: { text: string; reducedMotion: boolean | null }) {
-  const [display, setDisplay] = useState<string>(() =>
-    reducedMotion ? text : text.replace(/\S/g, () => randGlyph()),
-  );
+  // Start with the plain text so SSR and the first client render match.
+  // Scrambling only kicks in after mount in the effect below.
+  const [display, setDisplay] = useState<string>(text);
   const [activeIdx, setActiveIdx] = useState(reducedMotion ? text.length : 0);
 
   useEffect(() => {
@@ -57,6 +57,8 @@ function DecodedName({
       setActiveIdx(text.length);
       return;
     }
+    setDisplay(text.replace(/\S/g, () => randGlyph()));
+    setActiveIdx(0);
     const start = performance.now();
     const total = 900;            // ms total reveal
     const perChar = total / text.length;
