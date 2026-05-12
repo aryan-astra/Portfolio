@@ -28,7 +28,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://aryan.sh"),
+  metadataBase: new URL("https://aryans.is-a.dev"),
   title: {
     default: "Aryan Shukla",
     template: "%s — Aryan Shukla",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Aryan Shukla",
     description: "Builder. CSE @ SRMIST. 300+ daily users on my projects.",
-    url: "https://aryan.sh",
+    url: "https://aryans.is-a.dev",
     siteName: "Aryan Shukla",
     type: "website",
   },
