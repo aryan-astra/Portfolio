@@ -48,3 +48,7 @@ octo-redesign-verify.png
 *.tsx.bak
 .vscode/mcp.json
 PROJECT_HANDOFF.md
+
+# Publishing rollback snapshots stay local.
+content/*.bak
+content/*.tmp
