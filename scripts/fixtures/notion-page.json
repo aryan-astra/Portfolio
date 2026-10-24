@@ -1,0 +1,13 @@
+{
+  "id": "page-fixture-001",
+  "properties": {
+    "Title": { "type": "title", "title": [{ "plain_text": "Fixture note" }] },
+    "Slug": { "type": "rich_text", "rich_text": [{ "plain_text": "fixture-note" }] },
+    "Excerpt": { "type": "rich_text", "rich_text": [{ "plain_text": "A test fixture." }] },
+    "PublishedAt": { "type": "date", "date": { "start": "2026-10-01" } },
+    "Status": { "type": "select", "select": { "name": "Published" } },
+    "Language": { "type": "select", "select": { "name": "en" } },
+    "Reviewed": { "type": "checkbox", "checkbox": true },
+    "Tags": { "type": "multi_select", "multi_select": [{ "name": "fixture" }] }
+  }
+}
