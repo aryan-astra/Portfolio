@@ -12,6 +12,7 @@
     "content:check": "node scripts/content-check.mjs",
     "content:sync": "node --env-file-if-exists=.env.local scripts/sync-notion.mjs",
     "archive:check": "node scripts/archive-check.mjs",
+    "audit:report": "node scripts/audit-report.mjs",
     "test:e2e": "playwright test"
   },
   "dependencies": {
