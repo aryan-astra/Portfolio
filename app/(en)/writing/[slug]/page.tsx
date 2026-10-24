@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { posts } from "@/lib/data";
+import LinkedText from "@/components/garden/LinkedText";
+import { itemRelations } from "@/lib/garden";
 
 type WritingPageProps = {
   params: Promise<{ slug: string }>;
@@ -20,6 +22,7 @@ export async function generateMetadata({ params }: WritingPageProps): Promise<Me
   return {
     title: post.title,
     description: post.description,
+    alternates: { canonical: `/writing/${slug}`, languages: { en: `/writing/${slug}`, ru: `/ru/writing/${slug}` } },
   };
 }
 
@@ -40,7 +43,7 @@ export default async function WritingPostPage({ params }: WritingPageProps) {
   return (
     <article className="section-block">
       <div className="content-shell">
-        <Link href="/writing" className="site-link mono-label inline-flex transition-colors">
+        <Link prefetch={false} href="/writing" className="site-link mono-label inline-flex transition-colors">
           Back to writing
         </Link>
 
@@ -79,7 +82,7 @@ export default async function WritingPostPage({ params }: WritingPageProps) {
             </div>
           </aside>
 
-          <div className="max-w-[78ch] space-y-7">
+          <div className="article-copy space-y-7">
             {post.body.map((paragraph, index) => {
               const sectionId = `section-${String(index + 1).padStart(2, "0")}`;
               const tocLabel = `${String(index + 1).padStart(2, "00")} · ${paragraph.split(" ").slice(0, 6).join(" ")}\u2026`;
@@ -93,11 +96,12 @@ export default async function WritingPostPage({ params }: WritingPageProps) {
                 >
                   <p className="text-[1.05rem] leading-[1.9] text-muted-foreground">
                     <span className="mr-4 align-top font-mono text-[0.7rem] text-highlight">{String(index + 1).padStart(2, "0")}</span>
-                    {paragraph}
+                    <LinkedText text={paragraph} />
                   </p>
                 </section>
               );
             })}
+            <aside className="border-t border-border pt-6"><h2 className="font-display text-2xl mb-4">Connected ideas</h2><ul>{itemRelations(`post:${post.slug}`).map(item => <li key={item.id}><Link prefetch={false} className="site-link" href={item.href}>{item.title}</Link></li>)}</ul></aside>
           </div>
         </div>
       </div>

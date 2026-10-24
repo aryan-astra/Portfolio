@@ -1,0 +1,50 @@
+.ru-site {
+  --ru-paper: #fffef9;
+  --ru-ink: #171717;
+  --ru-rule: #b9b6ad;
+  --ru-blue: #0000ee;
+  min-height: 100%;
+  background: var(--ru-paper);
+  color: var(--ru-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  line-height: 1.65;
+  color-scheme: light;
+}
+
+html { background: #fffef9; }
+body { margin: 0; background: #fffef9; color: #171717; }
+.ru-site * { box-sizing: border-box; }
+.ru-page { max-width: 920px; margin: 0 auto; padding: 0 1.4rem; }
+.ru-site a { color: var(--ru-blue); text-decoration: underline; text-underline-offset: 2px; }
+.ru-site a:visited { color: #551a8b; }
+.ru-site a:hover { text-decoration-thickness: 2px; }
+.ru-masthead { display: flex; flex-wrap: wrap; align-items: baseline; gap: .45rem 1.2rem; padding: 1.4rem 0 .8rem; border-bottom: 1px solid var(--ru-rule); font-size: .95rem; }
+.ru-masthead nav { display: flex; flex-wrap: wrap; gap: .3rem 1rem; }
+.ru-wordmark { font-weight: 700; }
+.ru-language { margin-left: auto; }
+.ru-title-block { padding: 2.1rem 0 1.3rem; border-bottom: 1px solid var(--ru-rule); }
+.ru-title-block h1 { margin: .15rem 0; font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 400; line-height: 1.08; }
+.ru-eyebrow, .ru-label { margin: 0; color: #555; font-family: Arial, sans-serif; font-size: .73rem; letter-spacing: .08em; text-transform: uppercase; }
+.ru-lede { max-width: 68ch; font-size: 1.15rem; }
+.ru-section { padding: 1.5rem 0; border-bottom: 1px solid var(--ru-rule); }
+.ru-section h2 { margin: 0 0 .55rem; font-size: 1.35rem; font-weight: 400; }
+.ru-section h3 { margin: .2rem 0; font-size: 1.1rem; }
+.ru-section p { margin: .45rem 0; }
+.ru-list { margin: .5rem 0; padding-left: 1.35rem; }
+.ru-record { display: grid; grid-template-columns: minmax(8rem, .24fr) 1fr; gap: .2rem 1rem; padding: 1rem 0; border-bottom: 1px dotted var(--ru-rule); }
+.ru-record:last-child { border-bottom: 0; }
+.ru-date { color: #555; font: .82rem Arial, sans-serif; }
+.ru-meta { color: #555; font-size: .9rem; }
+.ru-tags { color: #444; font-size: .86rem; }
+.ru-footer { padding: 1.5rem 0 2.5rem; color: #555; font-size: .84rem; }
+.ru-footer p { margin: .25rem 0; }
+.ru-notice { margin: 1rem 0; padding: .65rem .85rem; border-left: 3px solid #777; background: #f3f1ea; font-size: .84rem; }
+.ru-contents { display: flex; flex-wrap: wrap; gap: .3rem 1rem; padding: .8rem 0; border-bottom: 1px solid var(--ru-rule); font-size: .88rem; }
+.ru-small { font-size: .88rem; }
+
+@media (max-width: 560px) {
+  .ru-page { padding: 0 1rem; }
+  .ru-language { margin-left: 0; }
+  .ru-record { grid-template-columns: 1fr; gap: .1rem; }
+}

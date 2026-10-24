@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Fraunces, JetBrains_Mono } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import CustomCursor from "@/components/CustomCursor";
 import ThemeProvider from "@/components/ThemeProvider";
 
 const inter = Inter({
@@ -16,15 +15,15 @@ const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-display",
   display: "swap",
-  axes: ["SOFT", "WONK"],
-  weight: "variable",
+  weight: "400",
+  style: ["normal", "italic"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   display: "swap",
-  weight: ["400", "500", "600"],
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -34,10 +33,11 @@ export const metadata: Metadata = {
     template: "%s — Aryan Shukla",
   },
   description:
-    "CS sophomore at SRMIST. I make stuff. Some of it breaks. Most of it ships.",
+    "Aryan Shukla — software, small experiments, and a growing garden of ideas. Computer science at SRMIST.",
+  alternates: { canonical: "/", languages: { en: "/", ru: "/ru" }, types: { "application/rss+xml": "/feed.xml" } },
   openGraph: {
     title: "Aryan Shukla",
-    description: "Builder. CSE @ SRMIST. 300+ daily users on my projects.",
+    description: "Software, small experiments, and a growing garden of ideas.",
     url: "https://aryans.is-a.dev",
     siteName: "Aryan Shukla",
     type: "website",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Aryan Shukla",
-    description: "CS sophomore at SRMIST. I make stuff. Some of it ships.",
+    description: "Software, small experiments, and a growing garden of ideas. Computer science at SRMIST.",
   },
 };
 
@@ -61,10 +61,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen flex flex-col bg-background text-foreground antialiased relative overflow-x-clip">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "Person", name: "Aryan Shukla", url: "https://aryans.is-a.dev", sameAs: ["https://github.com/aryan-astra", "https://linkedin.com/in/aryanworks"] }) }} />
         <ThemeProvider>
-          <CustomCursor />
+          <a className="skip-link" href="#main-content">Skip to content</a>
           <Navbar />
-          <main className="flex-1 relative z-10" id="main-content">
+          <main className="flex-1 relative z-10" id="main-content" tabIndex={-1}>
             {children}
           </main>
           <div className="relative z-10" id="site-footer">

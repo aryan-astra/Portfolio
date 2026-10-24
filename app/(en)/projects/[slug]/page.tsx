@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowUpRight, GithubLogo } from "@phosphor-icons/react/dist/ssr";
 import { projects } from "@/lib/data";
 import RevealBlock from "@/components/RevealBlock";
+import LinkedText from "@/components/garden/LinkedText";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
@@ -24,6 +26,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   return {
     title: `${project.name} Case Study`,
     description: project.oneLiner,
+    alternates: { canonical: `/projects/${slug}`, languages: { en: `/projects/${slug}`, ru: `/ru/projects/${slug}` } },
   };
 }
 
@@ -42,7 +45,7 @@ export default async function ProjectCaseStudyPage({ params }: ProjectPageProps)
   return (
     <article className="section-block">
       <div className="content-shell">
-        <Link href="/#projects" className="site-link mono-label inline-flex transition-colors">
+        <Link prefetch={false} href="/#projects" className="site-link mono-label inline-flex transition-colors">
           Back to projects
         </Link>
 
@@ -75,6 +78,7 @@ export default async function ProjectCaseStudyPage({ params }: ProjectPageProps)
           </div>
         </header>
 
+        {slug === "arch-srm" && <figure className="mt-10"><Image src="/images/arch.webp" alt="Arch academic dashboard showing attendance, courses at risk, and the daily timetable" width={1200} height={569} className="w-full h-auto border border-border" /><figcaption className="font-mono text-xs text-muted-foreground mt-3">Repository screenshot. Personal information was sanitized in the source image.</figcaption></figure>}
         <div className="mt-10 grid gap-8 lg:grid-cols-[0.62fr_1fr]">
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <div className="border border-border bg-card/70 p-4">
@@ -99,21 +103,21 @@ export default async function ProjectCaseStudyPage({ params }: ProjectPageProps)
           <div className="grid gap-6">
             {sections.map(([title, body], i) => (
               <RevealBlock key={title} delay={i * 0.08}>
-                <section className="border border-border bg-card/70 p-5">
-                  <p className="mono-label mb-4 text-highlight">{title}</p>
-                  <p className="max-w-[76ch] text-[1rem] leading-[1.8] text-muted-foreground">{body}</p>
+              <section className="border border-border bg-card/70 p-5">
+                  <h2 className="mono-label mb-4 text-highlight">{title}</h2>
+                  <p className="max-w-[76ch] text-[1rem] leading-[1.8] text-muted-foreground"><LinkedText text={body} /></p>
                 </section>
               </RevealBlock>
             ))}
 
             <RevealBlock delay={sections.length * 0.08}>
               <section className="border border-border bg-card/70 p-5">
-                <p className="mono-label mb-4 text-highlight">Key decisions</p>
+                <h2 className="mono-label mb-4 text-highlight">Key decisions</h2>
                 <div className="grid gap-3">
                   {project.caseStudy.keyDecisions.map((decision, index) => (
                     <div key={decision} className="grid gap-3 border-b border-border pb-3 last:border-b-0 last:pb-0 sm:grid-cols-[3rem_1fr]">
                       <span className="font-mono text-sm text-muted-foreground">0{index + 1}</span>
-                      <p className="leading-relaxed text-muted-foreground">{decision}</p>
+                      <p className="leading-relaxed text-muted-foreground"><LinkedText text={decision} /></p>
                     </div>
                   ))}
                 </div>

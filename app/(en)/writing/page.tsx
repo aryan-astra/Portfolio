@@ -6,6 +6,7 @@ import { posts } from "@/lib/data";
 export const metadata: Metadata = {
   title: "Writing",
   description: "Notes on shipping, local AI, and hackathons.",
+  alternates: { canonical: "/writing", languages: { en: "/writing", ru: "/ru/writing" } },
 };
 
 function formatDate(dateStr: string) {
@@ -32,12 +33,14 @@ export default function WritingIndexPage() {
           </p>
         </div>
 
+        <p className="mt-8 text-sm text-muted-foreground">Shorter notes and future reading live in <Link prefetch={false} href="/notes" className="site-link">the notebook</Link>.</p>
+
         <div className="grid gap-4">
           {posts.map((post, index) => (
-            <Link
+            <Link prefetch={false}
               key={post.slug}
               href={`/writing/${post.slug}`}
-              className="group grid gap-5 border border-border bg-card p-5 transition-colors hover:border-highlight hover:bg-[#161616] md:grid-cols-[0.18fr_1fr_0.16fr] md:items-start"
+              className="group grid gap-5 border border-border bg-card p-5 transition-colors hover:border-highlight hover:bg-secondary md:grid-cols-[0.18fr_1fr_0.16fr] md:items-start"
             >
               <span className="font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted-foreground">{formatDate(post.date)}</span>
               <span>

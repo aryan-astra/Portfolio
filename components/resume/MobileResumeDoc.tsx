@@ -1,14 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { FileText, Image as ImageIcon } from "@phosphor-icons/react";
 import {
   RESUME_BLOCKS,
   type ResumeBlock,
-  type RoleVariant,
+  RESUME_PDF_PATH,
+  RESUME_JPG_PATH,
 } from "@/lib/resume";
-import ResumeRoleBubble from "./ResumeRoleBubble";
 
 /* ──────────────────────────────────────────────────────────────
  *  MobileResumeDoc
@@ -35,13 +35,11 @@ export default function MobileResumeDoc() {
   const [typedChars, setTypedChars] = useState<number[]>(() =>
     RESUME_BLOCKS.map(() => 0),
   );
-  const [selectedRole, setSelectedRole] = useState<RoleVariant | null>(null);
   const cancelledRef = useRef(false);
 
   /* ── Run the entire sequence in a single coordinated effect ── */
   useEffect(() => {
     if (reducedMotion) {
-      setStates(RESUME_BLOCKS.map(() => "rendered"));
       return;
     }
     cancelledRef.current = false;
@@ -109,16 +107,19 @@ export default function MobileResumeDoc() {
     return () => window.removeEventListener("keydown", onKey);
   }, [skip]);
 
-  const pdfHref = selectedRole?.pdf ?? "/resume/Aryan-Shukla-Resume.pdf";
-  const jpgHref = selectedRole?.jpg ?? "/resume/Aryan-Shukla-Resume.jpg";
+  const pdfHref = RESUME_PDF_PATH;
+  const jpgHref = RESUME_JPG_PATH;
 
   return (
     <div className="min-h-screen w-full pt-20 pb-24 bg-[#f5f1ea] text-[#2a2520]">
       {/* Floating download cluster (top-right) */}
       <div
         className="fixed right-4 top-20 z-30 flex flex-col gap-2"
+        data-print-hide
         aria-label="Download resume"
       >
+        <button type="button" onClick={skip} className="min-h-11 rounded-full border border-[#2a2520]/20 bg-[#fbf6e9] px-3 font-mono text-xs">Skip animation</button>
+        <button type="button" onClick={() => { skip(); requestAnimationFrame(() => window.print()); }} className="min-h-11 rounded-full border border-[#2a2520]/20 bg-[#fbf6e9] px-3 font-mono text-xs">Print résumé</button>
         <a
           href={pdfHref}
           download
@@ -155,17 +156,13 @@ export default function MobileResumeDoc() {
           <InPlaceBlock
             key={i}
             block={block}
-            state={states[i]}
+            state={reducedMotion ? "rendered" : states[i]}
             typedChars={typedChars[i]}
             reducedMotion={!!reducedMotion}
           />
         ))}
       </div>
 
-      <ResumeRoleBubble
-        onSelect={setSelectedRole}
-        selectedId={selectedRole?.id}
-      />
     </div>
   );
 }
@@ -182,36 +179,24 @@ function InPlaceBlock({
   typedChars: number;
   reducedMotion: boolean;
 }) {
-  if (state === "pending") {
-    return <div style={{ minHeight: "1em" }} />;
-  }
-
   return (
-    <AnimatePresence mode="wait" initial={false}>
-      {state === "typing" ? (
+    <div className="relative">
+      <div style={{ opacity: state === "typing" && !reducedMotion ? 0 : 1 }}><RenderedBlock block={block} /></div>
+      {state === "typing" && !reducedMotion && (
         <motion.div
+          aria-hidden
           key="latex"
           initial={reducedMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -2 }}
           transition={{ duration: 0.18 }}
-          className="font-mono text-[11px] text-[#7a6248] whitespace-pre-wrap"
-          style={{ marginTop: 2 }}
+          className="absolute inset-0 overflow-hidden font-mono text-[11px] text-[#7a6248] whitespace-pre-wrap"
         >
           {block.latex.slice(0, typedChars)}
           <span className="inline-block w-1.5 h-3 bg-[#7a6248] align-[-1px] ml-0.5 animate-pulse" />
         </motion.div>
-      ) : (
-        <motion.div
-          key="rendered"
-          initial={reducedMotion ? false : { opacity: 0, y: 2 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.22 }}
-        >
-          <RenderedBlock block={block} />
-        </motion.div>
       )}
-    </AnimatePresence>
+    </div>
   );
 }
 
@@ -220,9 +205,9 @@ function RenderedBlock({ block }: { block: ResumeBlock }) {
   if (block.kind === "header") {
     return (
       <div className="text-center mb-3">
-        <div style={{ fontSize: "1.9em", fontWeight: 700, letterSpacing: "0.01em" }}>
+        <h1 style={{ fontSize: "1.9em", fontWeight: 700, letterSpacing: "0.01em" }}>
           Aryan Shukla
-        </div>
+        </h1>
         <div style={{ fontSize: "0.92em", marginTop: 2 }}>
           +91 73395 79835 &nbsp;·&nbsp;{" "}
           <a href="mailto:aryanworks@hotmail.com" className="underline">
@@ -243,7 +228,7 @@ function RenderedBlock({ block }: { block: ResumeBlock }) {
   if (block.kind === "section") {
     return (
       <div className="mt-3 mb-1">
-        <div
+        <h2
           style={{
             fontWeight: 700,
             fontSize: "0.92em",
@@ -252,7 +237,7 @@ function RenderedBlock({ block }: { block: ResumeBlock }) {
           }}
         >
           {block.title}
-        </div>
+        </h2>
         <hr style={{ border: 0, borderTop: "0.5px solid #1a1612", margin: "1px 0 4px" }} />
       </div>
     );

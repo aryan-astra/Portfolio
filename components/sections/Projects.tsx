@@ -1,87 +1,26 @@
-"use client";
-
-import { useState } from "react";
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowUpRight, CaretDown } from "@phosphor-icons/react";
+import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { projects } from "@/lib/data";
-import ScatterField from "@/components/ScatterField";
-
-const mainProjects = projects.filter((project) => !project.featured && !project.secondary);
-const secondaryProjects = projects.filter((project) => project.secondary);
 
 export default function Projects() {
-  const [secondaryOpen, setSecondaryOpen] = useState(false);
-
   return (
-    <section id="projects" className="section-block">
-      <ScatterField variant="projects" />
-      <div className="content-shell">
-        <div className="mb-6 flex items-end justify-between gap-4">
-          <div>
-            <p className="section-label">project index</p>
-            <h2 className="section-title">A bench of smaller experiments.</h2>
-          </div>
-          <p className="hidden max-w-[38ch] text-sm leading-relaxed text-muted-foreground lg:block">
-            Smaller surfaces, shipped experiments, and half-answered questions that might become larger systems later.
-          </p>
-        </div>
-
-        <div className="border-t border-border">
-          {mainProjects.map((project, index) => (
-            <motion.div
-              key={project.slug}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.38, delay: index * 0.05 }}
-            >
-              <Link href={`/projects/${project.slug}`} className="group grid gap-4 border-b border-border py-5 transition-colors hover:bg-[#161616] md:grid-cols-[0.16fr_0.9fr_1.2fr_0.5fr] md:items-center md:px-3">
-                <span className="font-mono text-[0.7rem] text-muted-foreground">{String(index + 1).padStart(2, "0")}</span>
-                <span className="font-serif text-[clamp(1.7rem,3vw,2.6rem)] leading-none text-foreground transition-colors group-hover:text-highlight">
-                  {project.name}
-                </span>
-                <span className="max-w-[60ch] text-[0.98rem] leading-relaxed text-muted-foreground">{project.oneLiner}</span>
-                <span className="flex items-center gap-2 font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground transition-colors group-hover:text-highlight md:justify-self-end">
-                  {project.status}
-                  <ArrowUpRight size={14} />
-                </span>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-
-        {secondaryProjects.length > 0 && (
-          <div className="mt-8 border border-border bg-card/70">
-            <button
-              type="button"
-              onClick={() => setSecondaryOpen((value) => !value)}
-              className="flex w-full items-center justify-between gap-4 px-4 py-4 text-left"
-              aria-expanded={secondaryOpen}
-            >
-              <span>
-                <span className="mono-label block text-highlight">side quests</span>
-                <span className="mt-1 block text-sm text-muted-foreground">{secondaryProjects.length} compact project{secondaryProjects.length === 1 ? "" : "s"}</span>
-              </span>
-              <CaretDown className={`text-highlight transition-transform ${secondaryOpen ? "rotate-180" : ""}`} size={18} />
-            </button>
-
-            {secondaryOpen && (
-              <div className="border-t border-border">
-                {secondaryProjects.map((project) => (
-                  <Link key={project.slug} href={`/projects/${project.slug}`} className="group flex items-start justify-between gap-4 border-b border-border px-4 py-4 last:border-b-0 hover:bg-[#161616]">
-                    <span>
-                      <span className="block font-medium text-foreground transition-colors group-hover:text-highlight">{project.name}</span>
-                      <span className="mt-1 block text-sm leading-relaxed text-muted-foreground">{project.oneLiner}</span>
-                    </span>
-                    <ArrowUpRight size={14} className="mt-1 shrink-0 text-muted-foreground transition-colors group-hover:text-highlight" />
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
+    <section id="projects" className="work-section content-shell">
+      <div className="editorial-heading"><p className="eyebrow">01 / Selected work</p><h2>Made to be <em>used.</em></h2><p>A few things from my workbench.<br />Built, broken, and built again.</p></div>
+      <div className="featured-projects">
+        {projects.filter(project => project.featured).map((project, index) => (
+          <Link prefetch={false} href={`/projects/${project.slug}`} key={project.slug} className={`featured-project project-${project.slug}`}>
+            <div className="project-visual" aria-hidden>
+              {project.slug === "arch-srm" ? <div className="arch-sketch"><div className="sketch-top">arch<span>your campus, untangled.</span></div><div className="sketch-body"><span>MONDAY / DAY 1</span><strong>One less thing<br />to worry about.</strong><div className="sketch-bars"><i /><i /><i /><i /></div><div className="sketch-cells"><span>attendance<br /><b>on track ↗</b></span><span>timetable<br /><b>all in one place</b></span></div></div></div> : <div className="voco-sketch"><span>voco / local agent</span><div className="voco-mark">v<span>o</span>co<span className="voco-asterisk">✳</span></div><code>› your machine. your model.<br /><span>everything stays here.</span><br /><br />$ ollama run qwen3:4b<br /><span>ready when you are _</span></code></div>}
+              <span className="visual-index">0{index + 1} / INTERFACE STUDY</span>
+            </div>
+            <div className="project-caption"><div><p className="eyebrow">{project.tags.slice(0, 3).join(" / ")}</p><h3>{project.name}</h3></div><ArrowUpRight size={25} aria-hidden /></div>
+            <p className="project-description">{project.description.split(". ")[0]}.</p>
+          </Link>
+        ))}
       </div>
+      <div className="project-index-heading"><p className="eyebrow">Also on the workbench</p><span className="eyebrow">{String(projects.length).padStart(2, "0")} projects in the index</span></div>
+      <div className="project-index">{projects.filter(project => !project.featured && !project.secondary).map((project, index) => <Link prefetch={false} href={`/projects/${project.slug}`} key={project.slug}><span className="eyebrow">0{index + 3}</span><h3>{project.name}</h3><p>{project.oneLiner}</p><ArrowUpRight size={20} aria-hidden /></Link>)}</div>
+      <details className="side-quests"><summary>Side quests <span>{projects.filter(project => project.secondary).length} more projects +</span></summary><div>{projects.filter(project => project.secondary).map(project => <Link prefetch={false} href={`/projects/${project.slug}`} key={project.slug}><h3>{project.name} ↗</h3><p>{project.oneLiner}</p></Link>)}</div></details>
     </section>
   );
 }

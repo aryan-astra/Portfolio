@@ -140,7 +140,7 @@ export default function LampToggle() {
   // Dark-mode for visual branch (syncs via MutationObserver)
   const [dark, setDark] = useState(false);
   useEffect(() => {
-    setDark(document.documentElement.classList.contains("dark"));
+    const frame = requestAnimationFrame(() => setDark(document.documentElement.classList.contains("dark")));
     const obs = new MutationObserver(() =>
       setDark(document.documentElement.classList.contains("dark")),
     );
@@ -148,7 +148,7 @@ export default function LampToggle() {
       attributes: true,
       attributeFilter: ["class"],
     });
-    return () => obs.disconnect();
+    return () => { cancelAnimationFrame(frame); obs.disconnect(); };
   }, []);
 
   // Filament glow state after turning off
@@ -454,7 +454,7 @@ export default function LampToggle() {
           cx={handle.x} cy={handle.y} r={HDL_R}
           fill={hdlFill} stroke={hdlBorder} strokeWidth={1.5}
           style={{
-            cursor: dragging.current ? "grabbing" : "grab",
+            cursor: "grab",
             pointerEvents: "all",   // override parent none
           }}
           onMouseDown={onHandleMouseDown}

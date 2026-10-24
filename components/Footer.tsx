@@ -1,14 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
-  return (
-    <footer className="relative pt-12 pb-7">
-      <div className="content-shell relative z-10 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
-        <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-muted-foreground">
-          2026 / Aryan Shukla / aryans.is-a.dev
-        </p>
-        <p className="font-mono text-[0.65rem] uppercase tracking-[0.14em] text-muted-foreground md:text-right">
-          personal index, built in public, still local-first
-        </p>
-      </div>
-    </footer>
-  );
+  return <footer className="botanical-footer content-shell"><svg className="footer-flowers" viewBox="0 0 1200 220" fill="none" aria-hidden><g stroke="currentColor" strokeWidth="1.5" className="flower-stems"><path d="M70 220 Q95 120 58 50 M150 220 Q110 150 146 90 M1050 220 Q1100 110 1073 40 M1130 220 Q1105 140 1149 105"/><path d="M78 165 Q25 110 40 150 Q56 180 78 165 M135 150 Q184 113 164 153 Q144 174 135 150 M1081 130 Q1030 73 1042 114 Q1057 148 1081 130 M1120 181 Q1160 132 1155 166 Q1142 195 1120 181"/></g>{[[58,50],[146,90],[1073,40],[1149,105]].map(([x,y],i)=><g key={i} transform={`translate(${x} ${y})`} stroke="currentColor" strokeWidth="1.2">{Array.from({length:6},(_,n)=><ellipse key={n} cx="0" cy="-14" rx="5" ry="12" transform={`rotate(${n*60})`}/>)}<circle r="4" fill="var(--background)"/></g>)}</svg><div className="footer-thought">Keep a little room<br />for <em>curiosity.</em></div><div className="footer-line"><span className="eyebrow">© {new Date().getFullYear()} Aryan Shukla</span><nav aria-label="Footer"><Link prefetch={false} href="/ru" lang="ru">Русская версия</Link><a href="/og/">The original site ↗</a><Link prefetch={false} href="/privacy">Privacy</Link><a href="#main-content">Back to top ↑</a></nav><span className="eyebrow">Built slowly, with care.</span></div></footer>;
 }

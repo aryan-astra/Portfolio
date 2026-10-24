@@ -53,8 +53,8 @@ export const projects: Project[] = [
     name: "Arch SRM",
     oneLiner: "300+ students use this daily instead of the broken official portal.",
     description:
-      "A mobile-first PWA replacing SRMIST's official academic portal. Real session auth against the live university backend, zero scraping. Redis-backed persistence, adaptive attendance polling, grade-boundary projections, day-order timetable, and VAPID push notifications with foreground self-heal.",
-    tags: ["Next.js", "Cloudflare Workers", "Hono", "KV", "PWA", "Redis"],
+      "A mobile-first React and Vite PWA for SRMIST academics. A Node.js and Express backend maintains authenticated university sessions, with optional Redis persistence. Attendance, marks, timetable, adaptive polling, and VAPID push notifications live in one interface.",
+    tags: ["React", "Vite", "TypeScript", "Express", "PWA", "Redis"],
     github: "https://github.com/aryan-astra/Arch",
     live: "https://archsrm.netlify.app",
     status: "active",
@@ -64,11 +64,11 @@ export const projects: Project[] = [
       problem:
         "Students juggled three unstable university portals for attendance, marks, and timetable. The mobile experience was unusable. Sessions expired randomly.",
       approach:
-        "One fast PWA with a Cloudflare Workers proxy that holds the real university session. Aggressive KV caching means the UI responds in milliseconds even during peak exam-season traffic.",
-      stack: ["Next.js", "Cloudflare Workers", "Hono", "Cloudflare KV", "Redis", "PWA"],
+        "A React and Vite PWA talks to a Node.js and Express backend for university authentication and authenticated proxy requests. Sessions use Redis when configured, with an in-memory fallback. Adaptive polling keeps academic information up to date.",
+      stack: ["React 19", "Vite", "TypeScript", "Express 5", "Redis", "PWA"],
       keyDecisions: [
         "Real HTTPS session auth — no scraping, no credentials stored in plain text.",
-        "Edge-first: every read hits KV before touching the university backend.",
+        "Optional Redis session persistence keeps authentication separate from the browser interface.",
         "Attendance risk engine flags at-risk days before the deadline, not after.",
       ],
       outcome:

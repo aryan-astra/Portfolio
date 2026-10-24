@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import type { Transition } from "framer-motion";
 import { X } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
@@ -83,7 +83,6 @@ export function DynamicIslandTOC({
   const [activeId, setActiveId] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -99,8 +98,11 @@ export function DynamicIslandTOC({
       element: el,
     }));
 
-    setHeadings(data);
-    setActiveId(data[0]?.id ?? null);
+    const frame = requestAnimationFrame(() => {
+      setHeadings(data);
+      setActiveId(data[0]?.id ?? null);
+    });
+    return () => cancelAnimationFrame(frame);
   }, [headingSelector]);
 
   /* ── IntersectionObserver for active heading ── */
@@ -182,7 +184,7 @@ export function DynamicIslandTOC({
   const spring: Transition = { type: "spring", damping: 24, stiffness: 280 };
 
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       {children}
 
       {/* Fixed pill at bottom-center */}
@@ -223,7 +225,7 @@ export function DynamicIslandTOC({
               exit={{ opacity: 0, y: 12, scale: 0.95 }}
               transition={spring}
               className={cn(
-                "w-[340px] max-h-[400px] rounded-2xl border border-border",
+                "w-[min(340px,calc(100vw-2rem))] max-h-[400px] rounded-2xl border border-border",
                 "bg-background/95 backdrop-blur-md shadow-xl overflow-hidden",
                 "flex flex-col"
               )}
@@ -251,15 +253,12 @@ export function DynamicIslandTOC({
               <div className="overflow-y-auto flex-1 py-2">
                 {headings.map((h) => {
                   const isActive = h.id === activeId;
-                  const isHovered = h.id === hoveredId;
                   const indent = Math.max(0, h.level - 2) * 12;
 
                   return (
                     <button
                       key={h.id}
                       onClick={() => scrollToHeading(h.id)}
-                      onMouseEnter={() => setHoveredId(h.id)}
-                      onMouseLeave={() => setHoveredId(null)}
                       className={cn(
                         "w-full text-left px-4 py-1.5 text-xs transition-colors",
                         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded",
@@ -285,6 +284,6 @@ export function DynamicIslandTOC({
           )}
         </AnimatePresence>
       </div>
-    </>
+    </MotionConfig>
   );
 }
