@@ -1,57 +1,23 @@
 # Aryan Shukla — Portfolio
 
-Personal developer portfolio. Built with Next.js 16, Tailwind CSS v4, Framer Motion, and shadcn/ui.
+An editorial portfolio and growing knowledge garden. Next.js 16.4.3 App Router, React 19, Tailwind v4, Phosphor icons, static export. English uses warm paper, charcoal, blue, Fraunces/Inter/JetBrains Mono and small native interactions. Russian is a separate text-first document with no shipped client runtime. The original site is frozen under `/og`.
 
-## Stack
-
-- **Framework:** Next.js 16 (App Router, static export)
-- **Styling:** Tailwind CSS v4 + shadcn/ui components
-- **Animations:** Framer Motion (scroll-triggered, non-looping)
-- **Fonts:** Instrument Serif (display) + DM Sans (body) via `next/font/google`
-- **Theme:** Monochrome — light/dark toggle, persisted to `localStorage`
-- **Deployed on:** Vercel → `aryans.is-a.dev`
-
-## Local development
-
-```bash
-npm install
+```sh
+npm ci
 npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
-## Build
-
-```bash
+npm run lint
+npm test
 npm run build
+npm run preview
+npm run test:e2e
 ```
 
-## Project structure
+Development: http://localhost:3000. Static preview: http://127.0.0.1:4173. Browser tests use installed Google Chrome. `npm run build` validates content and the frozen archive, exports pages, removes unpublished sentinels, strips Russian runtime scripts, and verifies static routes. Do not use `next start` with static export.
 
-```
-app/
-  layout.tsx        — Root layout, fonts, metadata
-  page.tsx          — Assembles all sections
-  globals.css       — Design tokens, Tailwind v4 theme
-components/
-  Navbar.tsx        — Sticky nav with scroll-aware border
-  Footer.tsx        — Minimal footer
-  ThemeToggle.tsx   — Light/dark toggle
-  sections/
-    Hero.tsx
-    Projects.tsx
-    Skills.tsx
-    Hackathons.tsx
-    Contact.tsx
-lib/
-  data.ts           — All site content (projects, skills, hackathons)
-  utils.ts          — cn() helper
-```
+Routes: `/`, `/writing`, `/projects/[slug]`, `/resume`, `/garden`, `/garden/[slug]`, `/search`, `/notes`, `/notes/[slug]`, `/library`, `/library/[shelf]`, `/privacy`, `/feed.xml`, `/ru`, `/og`.
 
-## Content
+Content: `lib/data.ts` holds existing owner-provided projects/articles; `lib/ru.ts` holds translations; `lib/concepts.ts` holds conservative concept aliases; `content/notion-posts.json` holds validated editorial snapshots. Graph, search, and backlinks derive from these sources. Books, films, people, and notes stay empty until actual reviewed content is supplied.
 
-All site content lives in `lib/data.ts`. To update projects, skills, or hackathon entries, edit that file — no other files need to change.
-
-## License
+Read [architecture and delivery notes](docs/redesign.md), [publishing](docs/publishing.md), [localization](docs/localization.md), and [archive/rollback](docs/archive.md). Production remains https://aryans.is-a.dev until an explicit release decision. No paid service or visitor tracker was activated.
 
 All rights reserved. Not open for reuse without permission.
